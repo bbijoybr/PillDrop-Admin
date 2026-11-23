@@ -1,0 +1,618 @@
+<!doctype html><html lang="bn"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#0a7f63"><title>PillDrop Admin</title>
+<link rel="manifest" href="admin.webmanifest"><link rel="icon" type="image/png" href="admin-icon-192.png"><link rel="apple-touch-icon" href="admin-icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="PillDrop Admin">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f6f8f7;--card:#fff;--fg:#0f1a17;--muted:#66756f;--line:#e4eae7;--acc:#097a60;--acc2:#2bd1a6;--accfg:#fff;--soft:#e7f5f0;--bad:#d7263d;--badbg:#fdeceb;--ok:#0b7a58;--okbg:#e7f5f0;--shadow:0 1px 2px rgba(15,26,23,.04),0 12px 32px -8px rgba(9,122,96,.18);--blob:.5;--wrbg:#fff4e5;--wrfg:#9a3412;color-scheme:light}:root[data-theme=light]{color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0b1310;--card:#131d19;--fg:#e6f2ed;--muted:#8fa79d;--line:#22342d;--acc:#2fd0a0;--acc2:#065841;--accfg:#04201a;--soft:#17302a;--bad:#ff8a80;--badbg:#2b1715;--ok:#3ddba7;--okbg:#10291f;--shadow:0 1px 2px rgba(0,0,0,.3),0 16px 40px -10px rgba(0,0,0,.6);--blob:.28;--wrbg:#2a1d10;--wrfg:#fdba74;color-scheme:dark}}
+:root[data-theme=dark]{--bg:#0b1310;--card:#131d19;--fg:#e6f2ed;--muted:#8fa79d;--line:#22342d;--acc:#2fd0a0;--acc2:#065841;--accfg:#04201a;--soft:#17302a;--bad:#ff8a80;--badbg:#2b1715;--ok:#3ddba7;--okbg:#10291f;--shadow:0 1px 2px rgba(0,0,0,.3),0 16px 40px -10px rgba(0,0,0,.6);--blob:.28;--wrbg:#2a1d10;--wrfg:#fdba74;color-scheme:dark}
+*{box-sizing:border-box}[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;min-height:100vh;min-height:100dvh;background:var(--bg);color:var(--fg);font:16px/1.55 Inter,"Hind Siliguri",system-ui,-apple-system,"Noto Sans Bengali",sans-serif;padding:max(16px,env(safe-area-inset-top)) 16px max(20px,env(safe-area-inset-bottom));position:relative;overflow-x:hidden;display:flex;flex-direction:column}
+body::before,body::after{content:"";position:fixed;z-index:0;border-radius:50%;filter:blur(70px);opacity:var(--blob);pointer-events:none}
+body::before{width:340px;height:340px;background:#2bd1a6;top:-120px;right:-100px}
+body::after{width:300px;height:300px;background:#0a7f63;bottom:-120px;left:-100px}
+main{position:relative;z-index:1;max-width:480px;margin:0 auto;display:flex;flex-direction:column;gap:16px;justify-content:center;flex:1;width:100%;padding:16px 0}
+.brand{text-align:center;display:flex;flex-direction:column;align-items:center;gap:6px;animation:rise .6s ease both}
+.logo{display:flex;align-items:center;justify-content:center;gap:12px;font-size:32px;font-weight:700;letter-spacing:-.02em;line-height:1.1}
+.logo i{width:52px;height:52px;border-radius:16px;background:linear-gradient(135deg,#032e22 0%,#065841 55%,#0f8a68 100%);display:grid;place-items:center;position:relative;flex:none;box-shadow:0 10px 24px -8px rgba(10,127,99,.6)}
+.logo i::after{content:"";position:absolute;inset:0;border-radius:inherit;border:2px solid var(--acc);opacity:0;animation:ring 3s ease-out infinite}
+.logo span{color:var(--acc)}
+.tg{margin:0;font-size:14px;color:var(--muted)}
+.badge{display:inline-flex;align-items:center;gap:6px;margin-top:8px;padding:4px 12px;border-radius:99px;background:var(--soft);color:var(--acc);font-size:12px;font-weight:600;letter-spacing:.04em}
+.card{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:24px 20px;display:flex;flex-direction:column;gap:16px;box-shadow:var(--shadow);animation:rise .6s .08s ease both}
+.card h2{text-align:center;margin:0;font-size:20px;line-height:1.3}.card .sub{margin:-10px 0 2px;font-size:14px;color:var(--muted)}
+label{display:flex;flex-direction:column;gap:7px;font-size:14px;font-weight:500;color:var(--muted)}
+.ipt{position:relative;display:flex;align-items:center}
+.ipt>svg{position:absolute;left:13px;width:18px;height:18px;color:var(--muted);pointer-events:none;transition:color .15s}
+.ipt:focus-within>svg{color:var(--acc)}
+input{font:inherit;color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:12px 14px;width:100%;transition:border-color .15s,box-shadow .15s}
+.ipt input{padding-left:42px}.ipt.has-eye input{padding-right:46px}
+input::placeholder{color:var(--muted);opacity:.7}
+input:focus{outline:0;border-color:var(--acc);box-shadow:0 0 0 4px color-mix(in srgb,var(--acc) 18%,transparent)}
+input:disabled{opacity:.55}
+#code{letter-spacing:.35em;font-weight:600;font-variant-numeric:tabular-nums}#code::placeholder{letter-spacing:.35em}
+.eye{position:absolute;right:6px;top:50%;transform:translateY(-50%);width:36px;height:36px;padding:0;flex:none;background:transparent;color:var(--muted);border-radius:9px;display:grid;place-items:center}
+.eye svg{width:18px;height:18px}.eye .off{display:none}.eye.on .off{display:block}.eye.on .onn{display:none}
+.eye:hover{background:var(--soft);color:var(--acc)}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+button{font:inherit;font-weight:600;border:0;border-radius:12px;padding:12px 16px;background:linear-gradient(135deg,#0a7f63,#17b58c);color:#fff;cursor:pointer;flex:1 1 120px;transition:transform .12s,box-shadow .15s,filter .15s;box-shadow:0 8px 20px -8px rgba(10,127,99,.7)}
+button:hover{filter:brightness(1.06)}button:active{transform:scale(.98)}
+button:focus-visible{outline:3px solid color-mix(in srgb,var(--acc) 40%,transparent);outline-offset:2px}
+button.alt{background:transparent;color:var(--fg);border:1px solid var(--line);box-shadow:none}button.alt:hover{background:var(--soft);filter:none}
+button.danger{background:transparent;color:var(--bad);border:1px solid color-mix(in srgb,var(--bad) 55%,transparent);box-shadow:none}button.danger:hover{background:var(--badbg);filter:none}
+.card>button{flex:none}#enter{width:100%;padding:14px;font-size:16px}
+#msg{font-size:14px;overflow-wrap:anywhere;border-radius:12px;padding:11px 14px;background:var(--soft);color:var(--muted);animation:rise .25s ease both}
+#msg:empty{display:none}#msg.ok{background:var(--okbg);color:var(--ok)}#msg.err{background:var(--badbg);color:var(--bad)}
+small{color:var(--muted);font-weight:400}
+.foot{text-align:center;font-size:12px;color:var(--muted);margin:4px 0 0;display:flex;flex-direction:column;gap:2px}
+.sec{display:flex;align-items:center;justify-content:center;gap:6px}.sec svg{width:13px;height:13px}
+.bar{position:relative;z-index:1;max-width:480px;width:100%;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.bar .r{display:flex;gap:8px}
+.pill{flex:none;display:inline-flex;align-items:center;justify-content:center;gap:6px;height:38px;padding:0 14px;border-radius:99px;border:1px solid var(--line);background:var(--card);color:var(--fg);font:inherit;font-size:14px;font-weight:600;text-decoration:none;cursor:pointer;box-shadow:none;transition:background .15s,border-color .15s}
+.pill:hover{background:var(--soft);border-color:var(--acc);filter:none}
+.pill.home{color:var(--acc)}
+.pill.ic{width:38px;padding:0;font-size:16px}
+.anim{display:flex;justify-content:center;margin:-6px 0 -8px}
+.rpl{transform-box:fill-box;transform-origin:center;opacity:0;animation:rip 4s ease-out infinite}.rpl.r2{animation-delay:.25s}.rpl.r3{animation-delay:.5s}
+@keyframes rip{0%,44%{transform:scale(.3);opacity:0}47%{opacity:.85}100%{transform:scale(1.8);opacity:0}}
+.lgo{transform-box:fill-box;transform-origin:center;animation:dropin 4s cubic-bezier(.3,0,.3,1) infinite}
+@keyframes dropin{0%{transform:translateY(-70px) scale(.85);opacity:0}22%{opacity:1}44%{transform:translateY(0) scale(1.06)}52%{transform:translateY(0) scale(.96)}62%,100%{transform:translateY(0) scale(1);opacity:1}}
+.cap{transform-box:fill-box;transform-origin:center;animation:bob 3.5s ease-in-out infinite}@keyframes bob{0%,100%{transform:translateY(0) rotate(-14deg)}50%{transform:translateY(-10px) rotate(-6deg)}}
+.sp{animation:tw 2.2s ease-in-out infinite}.s2{animation-delay:.7s}.s3{animation-delay:1.3s}@keyframes tw{0%,100%{opacity:.15}50%{opacity:1}}
+#pdsp{position:fixed;inset:0;z-index:99999;background:var(--bg);color:var(--fg);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 24px;transition:opacity .6s ease}
+#pdsp.off{opacity:0;pointer-events:none}
+#pdsp .lg{width:96px;height:96px;border-radius:50%;background:linear-gradient(135deg,#032e22 0%,#065841 55%,#0f8a68 100%);display:grid;place-items:center}
+#pdsp .lg svg{width:52%;height:52%}
+#pdsp .nm{font-size:28px;font-weight:700;margin-top:16px}
+#pdsp .sl{font-size:15px;opacity:.7;margin-top:6px;line-height:1.5}
+#pdsp .wr{max-width:320px;margin-top:26px;background:var(--wrbg);color:var(--wrfg);border-radius:12px;padding:10px 12px;font-size:12.5px;line-height:1.5}
+.lh{display:flex;align-items:center;justify-content:center;gap:8px}.lh .sh{display:grid;place-items:center;color:var(--acc)}
+.tabs{display:flex;gap:6px;overflow-x:auto;padding:2px;margin:-4px -4px 0;scrollbar-width:none}.tabs::-webkit-scrollbar{display:none}
+button.tb{flex:1 0 auto;padding:9px 14px;font-size:14px;background:transparent;color:var(--muted);border:1px solid var(--line);box-shadow:none;border-radius:99px;white-space:nowrap}
+button.tb.on{background:var(--soft);color:var(--acc);border-color:var(--acc)}button.tb:hover{filter:none;background:var(--soft)}
+.tp{display:flex;flex-direction:column;gap:16px}.tp>button,details>button,.grp>button{flex:none}
+textarea,select{font:inherit;color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:12px 14px;width:100%;transition:border-color .15s,box-shadow .15s}
+textarea{resize:vertical;min-height:48px;font-size:14px;line-height:1.5}
+textarea:focus,select:focus{outline:0;border-color:var(--acc);box-shadow:0 0 0 4px color-mix(in srgb,var(--acc) 18%,transparent)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:end}.two label{min-width:0}
+.sw{flex-direction:row;align-items:center;gap:12px;cursor:pointer;color:var(--fg);font-weight:600;position:relative}
+.sw input{position:absolute;opacity:0;width:0;height:0;padding:0;border:0}
+.trk{width:44px;height:26px;border-radius:99px;background:var(--line);position:relative;flex:none;transition:background .2s}
+.trk::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.3);transition:left .2s}
+.sw input:checked+.trk{background:var(--acc)}.sw input:checked+.trk::after{left:21px}.sw input:focus-visible+.trk{outline:3px solid color-mix(in srgb,var(--acc) 40%,transparent);outline-offset:2px}
+.hint{margin:0;font-size:13px;color:var(--muted);line-height:1.5}
+.grp{display:flex;flex-direction:column;gap:12px;padding:14px;border:1px solid var(--line);border-radius:16px}
+details{border:1px solid var(--line);border-radius:16px;padding:12px 14px}details[open]{display:flex;flex-direction:column;gap:12px}summary{cursor:pointer;font-weight:600;color:var(--fg)}
+.lst{display:flex;flex-direction:column;gap:6px;font-size:13px}.lst .it{display:flex;justify-content:space-between;gap:8px;padding:8px 10px;border-radius:10px;background:var(--bg);border:1px solid var(--line)}.lst .it span:last-child{color:var(--muted);text-align:right}.lst .bad{color:var(--bad)}.lst .good{color:var(--ok)}
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.kpi{background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:10px 6px;text-align:center}.kpi b{display:block;font-size:20px;line-height:1.2;color:var(--acc)}.kpi span{font-size:12px;color:var(--muted)}
+.tw{overflow-x:auto;margin:0 -4px}table{border-collapse:collapse;width:100%;font-size:12.5px;font-variant-numeric:tabular-nums}th,td{padding:7px 6px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}th:first-child,td:first-child{text-align:left}th{color:var(--muted);font-weight:600}
+.chips{display:flex;flex-wrap:wrap;gap:6px}.chips button{flex:none;padding:6px 10px;font-size:12.5px;background:var(--bg);color:var(--fg);border:1px solid var(--line);box-shadow:none;border-radius:99px}
+@keyframes ring{0%{transform:scale(1);opacity:.55}70%,100%{transform:scale(1.5);opacity:0}}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+main.wide{max-width:780px}
+.col{display:flex;flex-direction:column;gap:14px}
+button.sm{flex:none;padding:6px 12px;font-size:13px;border-radius:10px;box-shadow:none}
+.it2{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:9px 12px;border:1px solid var(--line);border-radius:12px;background:var(--bg)}
+.it2 .nm{min-width:0;overflow-wrap:anywhere;font-size:14px}.it2 .nm small{display:block}
+.it2 .ac{display:flex;gap:6px;flex:none;flex-wrap:wrap;justify-content:flex-end}
+.bdg{display:inline-block;font-size:11px;padding:1px 8px;border-radius:99px;background:var(--soft);color:var(--acc);margin-left:6px;font-weight:600}.bdg.bad{background:var(--badbg);color:var(--bad)}
+.gridf{display:grid;grid-template-columns:1fr 1fr;gap:10px}.gridf .full{grid-column:1/-1}@media (max-width:560px){.gridf{grid-template-columns:1fr}}
+.sbar{position:sticky;bottom:8px;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 14px;background:var(--card);border:1px solid var(--acc);border-radius:14px;box-shadow:var(--shadow);z-index:5;font-size:14px;font-weight:600}.sbar button{flex:none}
+.kpis4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}@media (max-width:560px){.kpis4{grid-template-columns:repeat(2,1fr)}}
+.kpi.click{cursor:pointer}.kpi.click:hover{border-color:var(--acc)}
+.out{white-space:pre-wrap;overflow-wrap:anywhere;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:12px;font-size:14px;max-height:320px;overflow:auto}.out:empty{display:none}
+.rpc .note{font-weight:600;overflow-wrap:anywhere}
+.chips button.on{background:var(--soft);color:var(--acc);border-color:var(--acc)}
+.subtabs{margin-bottom:2px}
+input[type=file]{padding:9px 10px}
+#panel{animation:none}
+/* PillDrop Admin: mockup style */
+:root{--bg:#f4f7f6;--card:#fff;--line:#e5ece9;--acc:#0a7a5c;--soft:#e1f3ec;--hg:linear-gradient(135deg,#055a42 0%,#0a7f63 55%,#1dbd90 100%);--shadow:0 12px 30px -14px rgba(8,90,68,.28)}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--hg:linear-gradient(135deg,#032e22 0%,#065841 55%,#0f8a68 100%)}}
+:root[data-theme=dark]{--hg:linear-gradient(135deg,#032e22 0%,#065841 55%,#0f8a68 100%)}
+body{padding-bottom:calc(110px + env(safe-area-inset-bottom))}
+body::before,body::after{display:none}
+main{justify-content:flex-start}
+.brand{position:relative;overflow:hidden;background:var(--hg);color:#fff;border-radius:36px;padding:22px 20px 22px;align-items:center;text-align:center;box-shadow:0 24px 40px -20px rgba(6,90,66,.65)}
+.brand::before{content:"";position:absolute;right:-70px;top:-80px;width:250px;height:250px;border-radius:50%;background:rgba(255,255,255,.1)}
+.brand .anim{position:relative;margin:-6px 0 -8px}
+.brand .lgo rect{stroke:#fff;stroke-width:3}
+.brand .logo{position:relative;font-size:30px;color:#fff;justify-content:center}
+.brand .logo span{color:#c6f5e3}
+.brand .tg{position:relative;color:rgba(255,255,255,.88);font-size:16px}
+.card{border:0;border-radius:30px;box-shadow:var(--shadow)}
+.card h2{color:var(--acc)}
+.bar .pill{height:48px;border-radius:18px;border:0;box-shadow:var(--shadow);background:var(--card)}
+.bar .pill.ic{width:48px}
+button{border-radius:18px;background:linear-gradient(135deg,#0b7d62,#1ebd92)}
+button.alt{background:transparent}
+input,textarea,select{border-radius:18px}
+.tabs{position:fixed;left:0;right:0;bottom:0;z-index:20;margin:0;padding:12px 12px calc(14px + env(safe-area-inset-bottom));background:var(--card);border-radius:34px 34px 0 0;box-shadow:0 -12px 34px -16px rgba(8,60,46,.3);gap:4px}
+button.tb{border:0;background:none;color:var(--muted);border-radius:18px;padding:10px 16px;font-weight:600}
+button.tb.on{background:var(--soft);color:var(--acc)}
+.kpi{border:0;border-radius:22px;padding:14px 6px}
+.kpis .kpi:nth-child(4n+1),.kpis4 .kpi:nth-child(4n+1){background:#dff3ea}.kpis .kpi:nth-child(4n+2),.kpis4 .kpi:nth-child(4n+2){background:#fdefd3}.kpis .kpi:nth-child(4n+3),.kpis4 .kpi:nth-child(4n+3){background:#e1eafc}.kpis .kpi:nth-child(4n+4),.kpis4 .kpi:nth-child(4n+4){background:#f2e3f6}
+.kpi b{color:#0e1f1a}.kpi span{color:#4d5f58}
+:root[data-theme=dark] .kpi{filter:brightness(.8)}
+.grp,details{border:0;border-radius:24px;background:var(--bg)}
+.it2,.lst .it{border:0;border-radius:18px}
+.sbar{border-radius:24px}
+.chips button{border:0;box-shadow:var(--shadow)}
+.chips button.on{background:var(--hg);color:#fff}
+/* sticky top bar (full width, no overflow) */
+.bar{position:sticky;top:0;z-index:20;width:auto;max-width:none;background:var(--bg);margin:calc(-1*max(16px,env(safe-area-inset-top))) -16px 0;padding:max(16px,env(safe-area-inset-top)) calc(16px + max(0px,(100% - 480px)/2)) 10px}
+/* bottom tabs: swipe sideways */
+.tabs{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;scroll-snap-type:x proximity;justify-content:flex-start}
+button.tb{flex:0 0 auto;scroll-snap-align:center}
+</style></head><body>
+<div id="pdsp" aria-hidden="true"><div class="lg"><svg viewBox="0 0 96 96"><path d="M48 14C53 28 72 44 72 60a24 24 0 0 1-48 0C24 44 43 28 48 14Z" fill="#fff"/><path d="M48 50v20M38 60h20" stroke="#065841" stroke-width="7" stroke-linecap="round"/></svg></div><div class="nm">PillDrop</div><div class="sl" data-i="tg"></div><div class="wr" data-i="wr"></div></div>
+<div class="bar"><a class="pill home" href="https://bbijoybr.github.io/PillDrop/" id="home"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></svg><span data-i="home"></span></a><div class="r"><button type="button" class="pill ic" id="thb" aria-label="Theme">🌓</button><button type="button" class="pill" id="lgb" aria-label="Language">English</button></div></div>
+<main>
+<div class="brand">
+ <div class="anim"><svg viewBox="0 0 240 200" width="190" height="158" aria-hidden="true"><defs><linearGradient id="gg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#032e22"/><stop offset=".55" stop-color="#065841"/><stop offset="1" stop-color="#0f8a68"/></linearGradient></defs>
+<ellipse class="rpl r1" cx="120" cy="170" rx="62" ry="14" fill="none" stroke="#2bd1a6" stroke-width="2.5"/><ellipse class="rpl r2" cx="120" cy="170" rx="62" ry="14" fill="none" stroke="#2bd1a6" stroke-width="2"/><ellipse class="rpl r3" cx="120" cy="170" rx="62" ry="14" fill="none" stroke="#2bd1a6" stroke-width="1.5"/>
+<g class="lgo"><rect x="78" y="58" width="84" height="84" rx="26" fill="url(#gg)"/><path d="M120 74S99 99 99 113a21 21 0 0 0 42 0C141 99 120 74 120 74z" fill="#fff"/><path d="M120 105v19M110.500 114.500h19" stroke="#065841" stroke-width="5" stroke-linecap="round" fill="none"/></g>
+<g class="cap"><rect x="20" y="96" width="50" height="20" rx="10" fill="#fff" stroke="#0a7f63" stroke-width="2.500"/><path d="M45 96h15a10 10 0 0 1 0 20H45z" fill="#2bd1a6"/></g>
+<circle class="sp s1" cx="190" cy="62" r="4" fill="#2bd1a6"/><circle class="sp s2" cx="204" cy="112" r="3" fill="#0a7f63"/><circle class="sp s3" cx="52" cy="56" r="3" fill="#0a7f63"/></svg></div>
+<div class="logo"><b>Pill<span>Drop</span></b></div>
+ <p class="tg" data-i="tg"></p>
+</div>
+<div class="card" id="login">
+ <div><h2 class="lh"><span class="sh"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 4.5-3.2 8-8 9-4.8-1-8-4.5-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg></span><span data-i="lt"></span></h2></div>
+  <label><span data-i="pw"></span><span class="ipt has-eye"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2.5"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><input id="pw" type="password" autocomplete="current-password" placeholder="••••••••"><button type="button" class="eye alt" data-for="pw" aria-label="দেখান"><svg class="onn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg><svg class="off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3l18 18M10.6 5.1A10 10 0 0 1 12 5c6.4 0 10 7 10 7a17 17 0 0 1-3.2 4M6.5 6.6C3.7 8.4 2 12 2 12s3.6 7 10 7c1.7 0 3.2-.4 4.5-1M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg></button></span></label>
+ <label><span data-i="cd"></span><span class="ipt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2.5" width="12" height="19" rx="3"/><path d="M10.5 18h3"/></svg><input id="code" inputmode="numeric" maxlength="6" autocomplete="one-time-code" placeholder="123456"></span></label>
+ <button id="enter" data-i="enter"></button>
+</div>
+<div class="card" id="panel" hidden>
+ <div class="tabs" role="tablist"><button type="button" class="tb on" data-tab="dash" data-i="t_dash"></button><button type="button" class="tb" data-tab="content" data-i="t_content"></button><button type="button" class="tb" data-tab="rep" data-i="t_rep"></button><button type="button" class="tb" data-tab="ai" data-i="t_ai"></button><button type="button" class="tb" data-tab="site" data-i="t_site"></button><button type="button" class="tb" data-tab="sec" data-i="t_sec"></button><button type="button" class="tb" data-tab="st" data-i="t_st"></button><button type="button" class="tb" data-tab="backup" data-i="t_backup"></button></div>
+ <section class="tp" data-p="dash"><div id="dashb" class="col"></div><button id="dashrf" class="alt" data-i="refresh"></button></section>
+ <section class="tp" data-p="content" hidden><div id="csub" class="chips subtabs"></div><div id="cbody" class="col"></div><div id="cbar" class="sbar" hidden><span data-bn="অসংরক্ষিত পরিবর্তন আছে" data-en="You have unsaved changes"></span><button id="csave" data-i="save"></button></div></section>
+ <section class="tp" data-p="rep" hidden><p class="hint" data-bn="সাইটের ব্যবহারকারীরা \"ভুল তথ্য জানান\" চাপলে এখানে আসে। দেখে কনটেন্ট ঠিক করুন, তারপর \"সমাধান\" চিহ্ন দিন।" data-en="When site visitors tap &quot;Report wrong information&quot;, it lands here. Fix the content, then mark it resolved."></p><div id="repf" class="chips subtabs"></div><div id="repl" class="col"></div><div class="row"><button id="reprf" class="alt" data-i="refresh"></button><button id="repclr" class="alt" data-bn="সমাধান হওয়াগুলো মুছুন" data-en="Clear resolved"></button></div></section>
+
+ <section class="tp" data-p="ai" hidden>
+  <label class="sw"><input type="checkbox" id="ai_on"><span class="trk"></span><span data-i="ai_on"></span></label>
+  <label><span data-i="base"></span><input id="base" inputmode="url" placeholder="https://freemodel.in/v1"></label>
+  <label><span data-i="model"></span><input id="model" list="mlist" placeholder="claude-opus-5-5"></label>
+  <label><span data-i="fb"></span><input id="fallback" list="mlist" placeholder="(optional)"><small data-i="fbh"></small></label>
+  <datalist id="mlist"></datalist>
+  <label><span data-i="ml"></span><textarea id="models" rows="3" placeholder="claude-opus-5-5&#10;claude-sonnet-5-5"></textarea></label>
+  <label><span>API Key <small id="keyhint"></small></span><span class="ipt has-eye"><input id="key" type="password" autocomplete="off" data-ph="kph" style="padding-left:14px"><button type="button" class="eye alt" data-for="key" aria-label="দেখান"><svg class="onn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg><svg class="off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3l18 18M10.6 5.1A10 10 0 0 1 12 5c6.4 0 10 7 10 7a17 17 0 0 1-3.2 4M6.5 6.6C3.7 8.4 2 12 2 12s3.6 7 10 7c1.7 0 3.2-.4 4.5-1M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg></button></span></label>
+  <div class="two"><label><span data-i="temp"></span><input id="temp" type="number" min="0" max="1.5" step="0.1"></label><label><span data-i="mx"></span><input id="max" type="number" min="100" max="4000" step="100"></label></div>
+  <details><summary data-i="sp"></summary>
+   <p class="hint" data-i="sph"></p>
+   <label><span data-i="sp_c"></span><textarea id="sys_common" rows="6"></textarea></label>
+   <label><span data-i="sp_chat"></span><textarea id="sys_chat" rows="2"></textarea></label>
+   <label><span data-i="sp_sym"></span><textarea id="sys_symptom" rows="2"></textarea></label>
+   <label><span data-i="sp_med"></span><textarea id="sys_medicine" rows="2"></textarea></label>
+   <button type="button" id="sysreset" class="alt" data-i="sp_reset"></button>
+  </details>
+  <details><summary data-bn="টেস্ট কনসোল" data-en="Test console"></summary>
+   <p class="hint" data-bn="এখান থেকে প্রশ্ন পাঠিয়ে দেখুন AI কেমন উত্তর দিচ্ছে (বর্তমান সেভ করা সেটিংস দিয়ে)। এটি আজকের পরিসংখ্যানে গোনা হয় না।" data-en="Send a question to see how the AI answers (with the currently saved settings). It is not counted in today's stats."></p>
+   <label><span data-bn="ধরন" data-en="Type"></span><select id="ask_kind"><option value="chat">Chat</option><option value="symptom">Symptom</option><option value="medicine">Medicine</option></select></label>
+   <label><span data-bn="প্রশ্ন" data-en="Question"></span><textarea id="ask_msg" rows="3" data-pbn="যেমন: জ্বর হলে কী করবেন?" data-pen="e.g. What to do for a fever?"></textarea></label>
+   <button type="button" id="ask_go" data-bn="পাঠান" data-en="Ask"></button><div id="ask_out" class="out"></div>
+  </details>
+  <details><summary data-bn="প্রম্পটের পুরোনো ভার্সন" data-en="Prompt history"></summary><div id="histl" class="col"></div></details>
+  <div class="row"><button id="save" data-i="save"></button><button id="test" class="alt" data-i="test"></button></div>
+  <button id="reset" class="danger" data-i="reset"></button>
+ </section>
+
+ <section class="tp" data-p="site" hidden>
+  <div class="grp"><label class="sw"><input type="checkbox" id="m_on"><span class="trk"></span><span data-i="m_on"></span></label>
+   <p class="hint" data-i="m_h"></p>
+   <label><span data-i="msg_bn"></span><textarea id="m_bn" rows="2"></textarea></label>
+   <label><span data-i="msg_en"></span><textarea id="m_en" rows="2"></textarea></label></div>
+  <div class="grp"><label class="sw"><input type="checkbox" id="b_on"><span class="trk"></span><span data-i="b_on"></span></label>
+   <p class="hint" data-i="b_h"></p>
+   <div class="two"><label><span data-bn="শুরুর সময় (ঐচ্ছিক)" data-en="Start (optional)"></span><input type="datetime-local" id="b_from"></label><label><span data-bn="শেষের সময় (ঐচ্ছিক)" data-en="End (optional)"></span><input type="datetime-local" id="b_to"></label></div>
+   <p class="hint" data-bn="ফাঁকা রাখলে ব্যানার সবসময় দেখাবে (চালু থাকলে)। সময় আপনার ফোনের সময় অনুযায়ী।" data-en="Leave empty to show the banner at all times (while on). Times follow your phone's clock."></p>
+   <label><span data-i="b_type"></span><select id="b_type"><option value="info" data-i="b_info"></option><option value="warn" data-i="b_warn"></option><option value="ok" data-i="b_ok"></option></select></label>
+   <label><span data-i="msg_bn"></span><textarea id="b_bn" rows="2"></textarea></label>
+   <label><span data-i="msg_en"></span><textarea id="b_en" rows="2"></textarea></label></div>
+  <button id="saveSite" data-i="save"></button>
+ </section>
+
+ <section class="tp" data-p="sec" hidden>
+  <div class="two"><label><span data-i="rate"></span><input id="rate" type="number" min="1" max="120"></label><label><span data-i="sess"></span><input id="sess" type="number" min="5" max="60"></label></div>
+  <p class="hint" data-i="rate_h"></p>
+  <label><span data-i="block"></span><textarea id="block" rows="3" placeholder="203.0.113.5"></textarea><small id="myip"></small></label>
+  <button id="saveSec" data-i="save"></button>
+  <div class="grp"><b data-bn="অ্যালার্ট (Telegram)" data-en="Alerts (Telegram)"></b>
+   <p class="hint" data-bn="AI বারবার ব্যর্থ হলে বা ত্রুটি হঠাৎ বাড়লে আপনার Telegram-এ মেসেজ আসবে। একই অ্যালার্ট ৩০ মিনিটে একবারের বেশি আসে না।" data-en="You get a Telegram message when the AI keeps failing or errors suddenly rise. The same alert is sent at most once every 30 minutes."></p>
+   <label class="sw"><input type="checkbox" id="al_on"><span class="trk"></span><span data-bn="অ্যালার্ট চালু" data-en="Alerts on"></span></label>
+   <label><span data-bn="কয়টি ত্রুটিতে অ্যালার্ট (কয়েক মিনিটের মধ্যে)" data-en="Alert after this many errors (within a few minutes)"></span><input id="al_errs" type="number" min="1" max="200"></label>
+   <label class="sw"><input type="checkbox" id="al_rep"><span class="trk"></span><span data-bn="নতুন ভুল-তথ্য রিপোর্টেও অ্যালার্ট" data-en="Also alert on new wrong-info reports"></span></label>
+   <div class="row"><button id="al_save" data-i="save"></button><button id="al_test" class="alt" data-bn="টেস্ট অ্যালার্ট" data-en="Send test alert"></button></div>
+   <details><summary data-bn="Telegram কীভাবে যুক্ত করবেন" data-en="How to connect Telegram"></summary><p class="hint" data-bn="১) Telegram-এ @BotFather খুলে /newbot দিয়ে একটি বট বানান ও টোকেন কপি করুন। ২) বটকে একটি মেসেজ পাঠান, তারপর @userinfobot থেকে আপনার চ্যাট আইডি নিন। ৩) Cloudflare → Worker → Settings → Variables and Secrets-এ দুটি Secret যোগ করুন: TG_TOKEN (বটের টোকেন) ও TG_CHAT (আপনার চ্যাট আইডি)। ৪) Deploy করে \"টেস্ট অ্যালার্ট\" চাপুন।" data-en="1) In Telegram open @BotFather, create a bot with /newbot and copy the token. 2) Send your bot a message, then get your chat ID from @userinfobot. 3) In Cloudflare → Worker → Settings → Variables and Secrets add two Secrets: TG_TOKEN (the bot token) and TG_CHAT (your chat ID). 4) Deploy, then tap &quot;Send test alert&quot;."></p></details></div>
+  <div class="grp"><b data-i="pw_t"></b>
+   <label><span data-i="pw_cur"></span><input id="pw_cur" type="password" autocomplete="current-password"></label>
+   <label><span data-i="pw_new"></span><input id="pw_new" type="password" autocomplete="new-password"></label>
+   <label><span data-i="pw_new2"></span><input id="pw_new2" type="password" autocomplete="new-password"></label>
+   <div class="row"><button id="pw_save" data-i="pw_save"></button><button id="pw_reset" class="alt" data-i="pw_reset"></button></div>
+   <p class="hint" data-i="pw_h"></p></div>
+  <div class="grp"><b data-i="log_t"></b><div id="log" class="lst"></div></div>
+ </section>
+
+ <section class="tp" data-p="st" hidden>
+  <div id="today" class="kpis"></div>
+  <div id="chart" class="col"></div>
+  <div class="tw"><table id="stt"></table></div>
+  <p class="hint" data-i="st_h"></p>
+  <div class="grp"><b data-i="rl_t"></b><div id="rll" class="chips"></div><p class="hint" data-i="rl_h"></p></div>
+  <button id="strf" class="alt" data-i="refresh"></button>
+ </section>
+
+<section class="tp" data-p="backup" hidden>
+  <p class="hint" data-bn="সব সেটিংস (AI সেটিংস, ব্যানার, ফিচার সুইচ, প্রম্পট) ও কনটেন্ট এক ফাইলে ডাউনলোড করুন। নিরাপত্তার জন্য API Key, পাসওয়ার্ড ও ব্লক করা IP-র তালিকা ব্যাকআপে থাকে না।" data-en="Download all settings (AI settings, banner, feature switches, prompts) and content in one file. For safety, the API key, password and blocked-IP list are not included."></p>
+  <button id="bk_dl" data-bn="ব্যাকআপ ডাউনলোড (JSON)" data-en="Download backup (JSON)"></button>
+  <div class="grp"><b data-bn="ব্যাকআপ থেকে ফেরান" data-en="Restore from a backup"></b><input type="file" id="bk_file" accept=".json,application/json"><small id="bk_info"></small><button id="bk_rs" class="danger" hidden data-bn="রিস্টোর করুন" data-en="Restore"></button></div>
+ </section>
+ <button id="logout" class="alt" data-i="logout"></button>
+</div>
+<div id="msg" role="status" aria-live="polite"></div>
+<p class="foot"><span data-i="f2"></span></p>
+</main>
+<script>var API="https://pilldrop-api.bbbijoybb.workers.dev",tok="";try{var _t=sessionStorage.getItem("pd_tok")||"";if(+_t.split(".")[0]>Date.now())tok=_t;else sessionStorage.removeItem("pd_tok")}catch(e){}
+var $=function(i){return document.getElementById(i)};
+var D={home:["সাইটে যান","Visit site"],lt:["অ্যাডমিন লগইন","Admin login"],pt:["এআই সেটিংস","AI settings"],pw:["অ্যাডমিন পাসওয়ার্ড","Admin password"],cd:["Authenticator কোড (৬ অঙ্ক)","Authenticator code (6 digits)"],enter:["প্রবেশ করুন","Sign in"],kph:["নতুন key দিন (ফাঁকা রাখলে আগেরটাই থাকবে)","Enter a new key (leave blank to keep the current one)"],save:["সেভ করুন","Save"],test:["টেস্ট করুন","Test"],reset:["ডিফল্টে ফিরুন","Reset to default"],logout:["লগআউট","Log out"],f2:["© PillDrop · শুধুমাত্র অনুমোদিত অ্যাডমিনের জন্য","© PillDrop · Authorized admins only"],tg:["লক্ষণ লিখুন, সমাধান পান এক ঝলকে","Type your symptoms, get answers in a flash"],wr:["PillDrop ডাক্তার নয়। এটি প্রেসক্রিপশন নয় এবং চিকিৎসকের পরামর্শের বিকল্প নয়।","PillDrop is not a doctor. This is not a prescription and not a substitute for a doctor's advice."],sure:["নিশ্চিত? আবার চাপুন","Sure? Tap again"],show:["দেখান","Show"],hide:["লুকান","Hide"]};
+var LANG="bn",TH="",hint=null;
+try{var sl=localStorage.getItem("pd_lang");if(sl==="en"||sl==="bn")LANG=sl;TH=localStorage.getItem("pd_theme")||""}catch(e){}
+function T(k){return D[k][LANG==="bn"?0:1]}
+function L(b,e){return LANG==="bn"?b:e}
+function applyTheme(){var r=document.documentElement;if(TH)r.setAttribute("data-theme",TH);else r.removeAttribute("data-theme");$("thb").textContent=TH==="dark"?"🌙":TH==="light"?"☀️":"🌓"}
+function paintHint(){$("keyhint").textContent=hint===null?"":hint.has?L("(বর্তমান: ","(current: ")+hint.key+")":L("(কোনো key নেই)","(no key set)")}
+function applyLang(){document.documentElement.lang=LANG;document.querySelectorAll("[data-i]").forEach(function(e){e.textContent=T(e.dataset.i)});
+ document.querySelectorAll("[data-ph]").forEach(function(e){e.placeholder=T(e.dataset.ph)});
+ document.querySelectorAll(".eye").forEach(function(b){b.setAttribute("aria-label",T(b.classList.contains("on")?"hide":"show"))});
+ $("lgb").textContent=LANG==="bn"?"English":"বাংলা";$("reset").textContent=T("reset");$("reset").dataset.sure="";paintHint();if(window.rer)rer();$("msg").textContent=""}
+$("lgb").onclick=function(){LANG=LANG==="bn"?"en":"bn";try{localStorage.setItem("pd_lang",LANG)}catch(e){}applyLang()};
+$("thb").onclick=function(){TH=TH===""?"dark":TH==="dark"?"light":"";try{localStorage.setItem("pd_theme",TH)}catch(e){}applyTheme()};
+function say(t,c){var m=$("msg");m.textContent=t;m.className=c||""}
+async function raw(path,method,body,auth){
+ var h={"Content-Type":"application/json"};if(auth)h.Authorization="Bearer "+auth;
+ var r=await fetch(API+path,{method:method,headers:h,body:body?JSON.stringify(body):undefined});
+ var d={};try{d=await r.json()}catch(e){}return{s:r.status,d:d}}
+function toLogin(m){tok="";try{sessionStorage.removeItem("pd_tok")}catch(e){}["pw_cur","pw_new","pw_new2"].forEach(function(i){if($(i))$(i).value=""});LOGD=null;STD=null;$("panel").hidden=true;$("login").hidden=false;$("pw").value="";$("code").value="";if(m)say(m,"err")}
+async function call(path,method,body){
+ var r=await raw(path,method,body,tok);
+ if(r.s===401){toLogin(L("সেশন শেষ। আবার লগইন করুন।","Session expired. Please log in again."))}return r}
+function fill(d){$("base").value=d.base||"";$("model").value=d.model||"";$("key").value="";
+ $("key").disabled=d.key_editable===false;
+ hint={has:!!d.has_key,key:d.key};paintHint()}
+async function load(){var r=await call("/admin/config","GET");if(r.d.ok){fill(r.d);$("login").hidden=true;$("panel").hidden=false}}
+$("enter").onclick=async function(){
+ var pw=$("pw").value,code=$("code").value.replace(/\s/g,"");
+ if(!pw||code.length!==6){say(L("পাসওয়ার্ড ও ৬ অঙ্কের কোড দিন।","Enter the password and the 6-digit code."),"err");return}
+ say(L("যাচাই হচ্ছে…","Verifying…"));
+ try{var r=await raw("/admin/login","POST",{password:pw,code:code});
+  if(r.s===401){say(L("পাসওয়ার্ড বা কোড ভুল। (একই কোড দুইবার চলে না, নতুন কোডের জন্য ৩০ সেকেন্ড অপেক্ষা করুন।)","Wrong password or code. (A code can't be used twice; wait 30 seconds for a new one.)"),"err");return}
+  if(r.s===429){say(L("অনেকবার ভুল হয়েছে। ১৫ মিনিট পরে চেষ্টা করুন।","Too many failed attempts. Try again in 15 minutes."),"err");return}
+  if(!r.d.ok){say(L("সার্ভার সেট করা নেই (","Server is not set up (")+(r.d.error||r.s)+L("). Worker-এ ADMIN_KEY, ADMIN_TOTP ও CONFIG KV যোগ করুন।","). Add ADMIN_KEY, ADMIN_TOTP and CONFIG KV to the Worker."),"err");return}
+  tok=r.d.token;try{sessionStorage.setItem("pd_tok",tok)}catch(e){}$("pw").value="";$("code").value="";say(L("লগইন হয়েছে। সেশন "+r.d.minutes+" মিনিট চলবে।","Logged in. The session lasts "+r.d.minutes+" minutes."),"ok");await load()}
+ catch(e){say(L("সার্ভারে পৌঁছানো যায়নি।","Could not reach the server."),"err")}};
+$("code").onkeydown=$("pw").onkeydown=function(e){if(e.key==="Enter")$("enter").click()};
+$("save").onclick=async function(){
+ var r=await call("/admin/config","POST",{base:$("base").value,model:$("model").value,key:$("key").value});
+ if(r.d.ok){say(L("সেভ হয়েছে।","Saved."),"ok");load()}else if(r.s!==401)say(r.d.error==="base_not_allowed"?L("ঠিকানাটা সঠিক https:// ঠিকানা হতে হবে (যেমন https://api.example.com/v1)।","Address must be a valid public https:// URL (e.g. https://api.example.com/v1)."):r.d.error==="key_required_when_base_changes"?L("সার্ভার বদলাতে নতুন API Key-ও দিতে হবে।","To change the server you must also enter a new API Key."):L("সেভ হয়নি: ","Not saved: ")+(r.d.error||r.s),"err")};
+$("test").onclick=async function(){say(L("টেস্ট চলছে…","Testing…"));
+ var r=await call("/admin/test","POST");
+ if(r.d.ok)say(L("AI সংযোগ ঠিক আছে (status ","AI connection is fine (status ")+r.d.status+").","ok");else if(r.s!==401)say(L("সমস্যা: ","Problem: ")+(r.d.error||("status "+r.d.status+" "+(r.d.sample||""))),"err")};
+$("reset").onclick=async function(){
+ if($("reset").dataset.sure!=="1"){$("reset").dataset.sure="1";$("reset").textContent=T("sure");setTimeout(function(){$("reset").dataset.sure="";$("reset").textContent=T("reset")},4000);return}
+ $("reset").dataset.sure="";$("reset").textContent=T("reset");
+ var r=await call("/admin/config","POST",{reset:true});
+ if(r.d.ok){say(L("ডিফল্টে ফিরেছে।","Reset to default."),"ok");load()}else if(r.s!==401)say(L("ব্যর্থ: ","Failed: ")+(r.d.error||r.s),"err")};
+document.querySelectorAll(".eye").forEach(function(b){b.onclick=function(){var i=$(b.dataset.for),sh=i.type==="password";i.type=sh?"text":"password";b.classList.toggle("on",sh);b.setAttribute("aria-label",T(sh?"hide":"show"))}});
+$("logout").onclick=function(){toLogin(L("লগআউট হয়েছে।","Logged out."))};
+
+Object.assign(D,{t_ai:["এআই","AI"],t_site:["সাইট","Site"],t_sec:["নিরাপত্তা","Security"],t_st:["পরিসংখ্যান","Stats"],
+ai_on:["AI সহায়ক চালু (বন্ধ করলে সবার জন্য AI থামবে)","AI helper on (turn off to stop AI for everyone)"],base:["API Base URL","API Base URL"],model:["Model","Model"],
+fb:["ব্যাকআপ মডেল","Backup model"],fbh:["প্রধান মডেল ব্যর্থ হলে এটি চেষ্টা হবে।","Used when the main model fails."],ml:["মডেলের তালিকা (প্রতি লাইনে একটি)","Model list (one per line)"],
+temp:["Temperature (০–১.৫)","Temperature (0–1.5)"],mx:["সর্বোচ্চ উত্তরের দৈর্ঘ্য","Max answer length"],
+sp:["সিস্টেম প্রম্পট","System prompts"],sph:["AI কীভাবে উত্তর দেবে তা এখানে ঠিক করুন। সাইটের নিজস্ব নিরাপত্তা-নিয়ম আলাদাভাবে সবসময় যুক্ত থাকে। ফাঁকা বা ডিফল্ট রাখলে ডিফল্টই চলবে।","Set how the AI answers. The site's own safety rules are always added separately. Leave blank or default to use the default."],
+sp_c:["সাধারণ (সব উত্তরে)","Common (all answers)"],sp_chat:["চ্যাট","Chat"],sp_sym:["লক্ষণ","Symptoms"],sp_med:["ওষুধ","Medicine"],sp_reset:["সব প্রম্পট ডিফল্টে ফেরান","Reset all prompts to default"],
+m_on:["রক্ষণাবেক্ষণ মোড","Maintenance mode"],m_h:["চালু করলে সাইটের উপর পুরো পর্দায় বার্তা দেখাবে এবং AI থামবে।","When on, visitors see a full-screen message and AI stops."],
+b_on:["ঘোষণা ব্যানার","Announcement banner"],b_h:["সাইটের উপরে একটি বার্তা দেখাবে। ব্যবহারকারী চাইলে বন্ধ করতে পারবে।","Shows a message at the top of the site. Visitors can close it."],
+b_type:["ধরন","Type"],b_info:["তথ্য (সবুজ)","Info (green)"],b_warn:["সতর্কতা (হলুদ)","Warning (yellow)"],b_ok:["সুখবর (সবুজ)","Good news (green)"],
+msg_bn:["বাংলা বার্তা","Bangla message"],msg_en:["English বার্তা","English message"],
+rate:["প্রতি মিনিটে সর্বোচ্চ অনুরোধ (এক জনের)","Max requests per minute (per person)"],sess:["অ্যাডমিন সেশন (মিনিট)","Admin session (minutes)"],rate_h:["সীমা সব সার্ভার জুড়ে হুবহু নাও মিলতে পারে; অপব্যবহার ঠেকাতে যথেষ্ট।","The limit may not be exact across servers, but is enough to curb abuse."],
+block:["ব্লক করা IP (প্রতি লাইনে একটি)","Blocked IPs (one per line)"],myip:["আপনার বর্তমান IP: ","Your current IP: "],
+pw_t:["অ্যাডমিন পাসওয়ার্ড বদল","Change admin password"],pw_cur:["বর্তমান পাসওয়ার্ড","Current password"],pw_new:["নতুন পাসওয়ার্ড (কমপক্ষে ১০ অক্ষর)","New password (at least 10 characters)"],pw_new2:["নতুন পাসওয়ার্ড আবার","Repeat new password"],pw_save:["পাসওয়ার্ড বদলান","Change password"],pw_reset:["Cloudflare-এর পাসওয়ার্ডে ফিরুন","Back to the Cloudflare password"],
+pw_h:["নতুন পাসওয়ার্ড ভুলে গেলে Cloudflare-এর KV থেকে \"pw\" কী মুছলে আগের ADMIN_KEY আবার চলবে।","If you forget the new password, delete the \"pw\" key in Cloudflare KV and the old ADMIN_KEY works again."],
+log_t:["সাম্প্রতিক লগইন","Recent logins"],lg_ok:["সফল","OK"],lg_password:["পাসওয়ার্ড ভুল","Wrong password"],lg_code:["কোড ভুল","Wrong code"],lg_locked:["বেশি ভুলে আটকানো","Locked (too many tries)"],lg_none:["এখনো কিছু নেই","Nothing yet"],
+st_h:["শুধু সংখ্যা গোনা হয়, ব্যবহারকারীর লেখা বা তথ্য সংরক্ষণ হয় না। সংখ্যা আনুমানিক।","Only counts are kept, never what users type. Numbers are approximate."],
+rl_t:["সাম্প্রতিক সীমা-ছাড়ানো IP","Recent IPs over the limit"],rl_h:["চাপ দিলে ব্লক তালিকায় যোগ হবে। নিরাপত্তা ট্যাবে গিয়ে সেভ করুন।","Tap to add to the block list, then save in the Security tab."],
+refresh:["রিফ্রেশ","Refresh"],c_date:["তারিখ","Date"],c_chat:["চ্যাট","Chat"],c_sym:["লক্ষণ","Symp."],c_med:["ওষুধ","Med."],c_err:["ত্রুটি","Err."],c_rl:["সীমা","Limit"],c_tok:["টোকেন","Tokens"],
+k_req:["আজকের প্রশ্ন","Today's requests"],k_err:["আজকের ত্রুটি","Today's errors"],k_tok:["আজকের টোকেন","Today's tokens"]});
+var DEFS=null,MYIP="",LOGD=null,STD=null;
+function V(id){return $(id).value}
+function setSw(id,v){$(id).checked=!!v}
+function fillSet(r){var s=r.settings;DEFS=r.defaults;MYIP=r.my_ip||"";
+ setSw("ai_on",s.ai_on);$("fallback").value=s.fallback||"";$("models").value=(s.models||[]).join("\n");
+ $("mlist").innerHTML="";(s.models||[]).forEach(function(m){var o=document.createElement("option");o.value=m;$("mlist").appendChild(o)});
+ $("temp").value=s.temp;$("max").value=s.max;
+ ["common","chat","symptom","medicine"].forEach(function(k){$("sys_"+k).value=s.sys[k]||DEFS[k]||""});
+ setSw("m_on",s.maint.on);$("m_bn").value=s.maint.bn;$("m_en").value=s.maint.en;
+ setSw("b_on",s.banner.on);$("b_from").value=toLocal(s.banner.from);$("b_to").value=toLocal(s.banner.to);if(s.alert){setSw("al_on",s.alert.on);$("al_errs").value=s.alert.errs;setSw("al_rep",s.alert.reports)}$("b_type").value=s.banner.type;$("b_bn").value=s.banner.bn;$("b_en").value=s.banner.en;
+ $("rate").value=s.rate;$("sess").value=s.session;$("block").value=(s.block||[]).join("\n");paintIp()}
+function paintIp(){$("myip").textContent=MYIP?T("myip")+MYIP:""}
+async function loadSet(){var r=await call("/admin/settings","GET");if(r.d.ok)fillSet(r.d)}
+var _load=load;load=async function(){await _load();if(!$("panel").hidden)loadSet()};
+function errTxt(e){return e==="cannot_block_yourself"?L("নিজের IP ব্লক করা যাবে না।","You can't block your own IP."):(e||"error")}
+async function postSet(b,okMsg){var r=await call("/admin/settings","POST",b);
+ if(r.d.ok){fillSet({settings:r.d.settings,defaults:DEFS,my_ip:MYIP});say(okMsg||L("সেভ হয়েছে।","Saved."),"ok");return true}
+ if(r.s!==401)say(L("সেভ হয়নি: ","Not saved: ")+errTxt(r.d.error||r.s),"err");return false}
+$("save").onclick=async function(){
+ var sys={};["common","chat","symptom","medicine"].forEach(function(k){var v=V("sys_"+k).trim();sys[k]=(v&&v!==(DEFS&&DEFS[k]))?v:""});
+ var r=await call("/admin/config","POST",{base:V("base"),model:V("model"),key:V("key")});
+ if(!r.d.ok){if(r.s!==401)say(r.d.error==="base_not_allowed"?L("ঠিকানাটা সঠিক https:// ঠিকানা হতে হবে (যেমন https://api.example.com/v1)।","Address must be a valid public https:// URL (e.g. https://api.example.com/v1)."):r.d.error==="key_required_when_base_changes"?L("সার্ভার বদলাতে নতুন API Key-ও দিতে হবে।","To change the server you must also enter a new API Key."):L("সেভ হয়নি: ","Not saved: ")+(r.d.error||r.s),"err");return}
+ await postSet({ai_on:$("ai_on").checked,fallback:V("fallback"),models:V("models"),temp:V("temp"),max:V("max"),sys:sys});load()};
+$("sysreset").onclick=async function(){if(await postSet({reset_sys:true},L("প্রম্পট ডিফল্টে ফিরেছে।","Prompts reset to default.")))loadSet()};
+$("saveSite").onclick=function(){postSet({maint:{on:$("m_on").checked,bn:V("m_bn"),en:V("m_en")},banner:{on:$("b_on").checked,type:V("b_type"),bn:V("b_bn"),en:V("b_en"),from:fromLocal(V("b_from")),to:fromLocal(V("b_to"))}})};
+$("saveSec").onclick=function(){postSet({rate:V("rate"),session:V("sess"),block:V("block")})};
+$("pw_save").onclick=async function(){var a=V("pw_cur"),n=V("pw_new");
+ if(!a||n.length<10){say(L("বর্তমান পাসওয়ার্ড দিন এবং নতুনটি কমপক্ষে ১০ অক্ষরের দিন।","Enter the current password and a new one of at least 10 characters."),"err");return}
+ if(n!==V("pw_new2")){say(L("দুটি নতুন পাসওয়ার্ড মিলছে না।","The two new passwords don't match."),"err");return}
+ var r=await call("/admin/password","POST",{current:a,next:n});
+ if(r.d.ok){["pw_cur","pw_new","pw_new2"].forEach(function(i){$(i).value=""});say(L("পাসওয়ার্ড বদলেছে। পরের লগইনে নতুনটি দিন।","Password changed. Use the new one next time you log in."),"ok")}
+ else if(r.s!==401||r.d.error==="wrong_current")say(r.d.error==="wrong_current"?L("বর্তমান পাসওয়ার্ড ভুল।","Current password is wrong."):L("হয়নি: ","Failed: ")+(r.d.error||r.s),"err")};
+$("pw_reset").onclick=async function(){var a=V("pw_cur");if(!a){say(L("আগে বর্তমান পাসওয়ার্ড দিন।","Enter the current password first."),"err");return}
+ var r=await call("/admin/password","POST",{current:a,reset:true});if(r.d.ok){$("pw_cur").value="";say(L("Cloudflare-এর ADMIN_KEY পাসওয়ার্ডে ফিরেছে।","Back to the Cloudflare ADMIN_KEY password."),"ok")}
+ else if(r.s!==401||r.d.error==="wrong_current")say(r.d.error==="wrong_current"?L("বর্তমান পাসওয়ার্ড ভুল।","Current password is wrong."):L("হয়নি: ","Failed: ")+(r.d.error||r.s),"err")};
+function fmt(t){try{return new Date(t).toLocaleString(LANG==="bn"?"bn-BD":"en-GB",{dateStyle:"medium",timeStyle:"short"})}catch(e){return String(t)}}
+function rLog(){var el=$("log");el.innerHTML="";if(!LOGD)return;if(!LOGD.length){var p=document.createElement("p");p.className="hint";p.textContent=T("lg_none");el.appendChild(p);return}
+ LOGD.slice(0,12).forEach(function(x){var d=document.createElement("div");d.className="it";var a=document.createElement("span"),b=document.createElement("span");
+  a.textContent=(x.ok?"✓ ":"✗ ")+T("lg_"+x.why);a.className=x.ok?"good":"bad";b.textContent=x.ip+" · "+fmt(x.t);d.appendChild(a);d.appendChild(b);el.appendChild(d)})}
+async function loadLog(){var r=await call("/admin/log","GET");if(r.d.ok){LOGD=r.d.log;rLog()}}
+function n0(v){return v||0}
+function rSt(){if(!STD)return;var t=STD.days[0]||{},q=function(x){return n0(x.req_chat)+n0(x.req_symptom)+n0(x.req_medicine)};
+ var k=$("today");k.innerHTML="";[[q(t),"k_req"],[n0(t.err),"k_err"],[n0(t.tok),"k_tok"]].forEach(function(a){var d=document.createElement("div");d.className="kpi";var b=document.createElement("b"),s=document.createElement("span");b.textContent=a[0].toLocaleString();s.textContent=T(a[1]);d.appendChild(b);d.appendChild(s);k.appendChild(d)});
+ var tb=$("stt");tb.innerHTML="";var hr=document.createElement("tr");["c_date","c_chat","c_sym","c_med","c_err","c_rl","c_tok"].forEach(function(c){var h=document.createElement("th");h.textContent=T(c);hr.appendChild(h)});tb.appendChild(hr);
+ STD.days.forEach(function(x){var r=document.createElement("tr");[x.d.slice(5),n0(x.req_chat),n0(x.req_symptom),n0(x.req_medicine),n0(x.err),n0(x.rl),n0(x.tok)].forEach(function(v){var c=document.createElement("td");c.textContent=v;r.appendChild(c)});tb.appendChild(r)});
+ var c=$("rll");c.innerHTML="";var seen={};(STD.rl||[]).forEach(function(x){if(seen[x.ip])return;seen[x.ip]=1;var b=document.createElement("button");b.type="button";b.textContent=x.ip;b.onclick=function(){var cur=V("block").split(/[\s,]+/).filter(Boolean);if(cur.indexOf(x.ip)<0)cur.push(x.ip);$("block").value=cur.join("\n");say(L(x.ip+" ব্লক তালিকায় যোগ হয়েছে। নিরাপত্তা ট্যাবে গিয়ে সেভ করুন।",x.ip+" added to the block list. Save it in the Security tab."),"ok")};c.appendChild(b)});
+ if(!c.children.length){var p=document.createElement("span");p.className="hint";p.textContent=T("lg_none");c.appendChild(p)}}
+async function loadSt(){var r=await call("/admin/stats","GET");if(r.d.ok){STD=r.d;rSt()}}
+window.rer=function(){paintIp();rLog();rSt()};
+$("strf").onclick=loadSt;
+document.querySelectorAll(".tb").forEach(function(b){b.onclick=function(){var t=b.dataset.tab;
+ document.querySelectorAll(".tb").forEach(function(x){x.classList.toggle("on",x===b)});
+ document.querySelectorAll(".tp").forEach(function(p){p.hidden=p.dataset.p!==t});
+ if(t==="sec")loadLog();if(t==="st")loadSt()}});
+var BASE_SYM=[{"t": "শ্বাসকষ্ট", "t_en": "Difficulty breathing", "k": ["শ্বাসকষ্ট", "শ্বাস কষ্ট", "শ্বাস নিতে", "দম বন্ধ", "হাঁপানি", "breath", "asthma"], "tips": ["সোজা হয়ে বসুন, শুয়ে থাকবেন না", "জামাকাপড় ঢিলা করুন, বাতাস চলাচল হতে দিন", "শান্ত থেকে ধীরে গভীর শ্বাস নিন", "হাঁপানির রোগী হলে ডাক্তারের নির্দেশমতো নিজের ইনহেলার ব্যবহার করুন"], "tips_en": ["Sit upright, do not lie down", "Loosen clothing and let air circulate", "Stay calm and breathe slowly and deeply", "If you have asthma, use your own inhaler as your doctor directed"], "dr": "ঠোঁট বা মুখ নীলচে হলে, কথা বলতে কষ্ট হলে, বুকে ব্যথা থাকলে বা অবস্থা খারাপ হলে এখনই ৯৯৯-এ ফোন করুন।", "dr_en": "Call 999 now if the lips or face turn bluish, speaking is difficult, there is chest pain, or the condition is getting worse.", "m": [], "fa": 1, "em": 1}, {"t": "বুকে ব্যথা", "t_en": "Chest pain", "k": ["বুকে ব্যথা", "বুক ব্যথা", "বুক চাপ", "chest pain", "হার্ট অ্যাটাক", "হৃদরোগ"], "tips": ["সঙ্গে সঙ্গে বসে পূর্ণ বিশ্রাম নিন, হাঁটাহাঁটি করবেন না", "জামা ঢিলা করুন", "ডাক্তারের দেওয়া হার্টের ওষুধ থাকলে নির্দেশমতো নিন"], "tips_en": ["Sit down and rest completely, do not walk around", "Loosen clothing", "If you have heart medicine prescribed by a doctor, take it as directed"], "dr": "ব্যথা ১৫ মিনিটের বেশি থাকলে, বাঁ হাত বা চোয়ালে ছড়ালে, ঘাম বা শ্বাসকষ্ট হলে এখনই ৯৯৯-এ ফোন করুন।", "dr_en": "Call 999 now if the pain lasts more than 15 minutes, spreads to the left arm or jaw, or comes with sweating or breathlessness.", "m": [], "fa": 1, "em": 1}, {"t": "অজ্ঞান হওয়া", "t_en": "Fainting / unconsciousness", "k": ["অজ্ঞান", "জ্ঞান হারা", "unconscious", "faint"], "tips": ["চিত করে শুইয়ে পা কিছুটা উঁচু করুন", "শ্বাস চলছে কিনা দেখুন", "মুখে পানি বা খাবার দেবেন না", "শ্বাস না থাকলে ৯৯৯-এ ফোন করে বুকে চাপ (সিপিআর) শুরু করুন"], "tips_en": ["Lay the person flat on their back and raise the legs slightly", "Check whether they are breathing", "Do not give water or food by mouth", "If not breathing, call 999 and start chest compressions (CPR)"], "dr": "জ্ঞান ফিরতে ১ মিনিটের বেশি লাগলে বা ফিরে আবার অসুস্থ হলে এখনই হাসপাতালে নিন।", "dr_en": "Take them to hospital now if they take more than 1 minute to wake up, or become unwell again after waking.", "m": [], "fa": 1, "em": 1}, {"t": "খিঁচুনি", "t_en": "Seizure / convulsion", "k": ["খিঁচুনি", "খিচুনি", "seizure", "convulsion"], "tips": ["রোগীকে নিরাপদ জায়গায় পাশ করে শোয়ান", "আশপাশের শক্ত জিনিস সরান", "মুখে চামচ, পানি বা কিছু দেবেন না, জোর করে ধরে রাখবেন না", "কতক্ষণ হচ্ছে সময় গুনুন"], "tips_en": ["Lay the person on their side in a safe place", "Move hard objects away from them", "Do not put a spoon, water or anything in the mouth, and do not hold them down", "Count how long it lasts"], "dr": "৫ মিনিটের বেশি চললে, প্রথমবার হলে বা শিশু/গর্ভবতী হলে এখনই ৯৯৯-এ ফোন করুন।", "dr_en": "Call 999 now if it lasts more than 5 minutes, it is the first time, or the person is a child or pregnant.", "m": [], "fa": 1, "em": 1}, {"t": "রক্তবমি / মলে রক্ত", "t_en": "Vomiting blood / blood in stool", "k": ["রক্তবমি", "বমিতে রক্ত", "মলে রক্ত", "পায়খানায় রক্ত", "কালো পায়খানা"], "tips": ["শুয়ে বিশ্রাম নিন, কিছু খাবেন না", "পাশ ফিরে থাকুন যেন বমি শ্বাসনালীতে না যায়"], "tips_en": ["Lie down and rest, do not eat anything", "Stay on your side so vomit does not enter the airway"], "dr": "এখনই হাসপাতালে যান বা ৯৯৯-এ ফোন করুন।", "dr_en": "Go to hospital now or call 999.", "m": [], "fa": 1, "em": 1}, {"t": "সাপে কামড় / বিষ", "t_en": "Snake bite / poisoning", "k": ["সাপ", "বিষ খেয়", "বিষ", "poison", "snake"], "tips": ["রোগীকে স্থির রাখুন, আক্রান্ত অঙ্গ নাড়াবেন না", "আংটি, চুড়ি, ঘড়ি খুলে ফেলুন", "কাটা, চোষা, শক্ত বাঁধন বা ঝাড়ফুঁকে সময় নষ্ট করবেন না", "বিষ খেলে জোর করে বমি করানোর চেষ্টা করবেন না", "বিষের পাত্র বা সাপের ছবি সঙ্গে নিন"], "tips_en": ["Keep the person still, do not move the bitten limb", "Remove rings, bangles and watches", "Do not waste time cutting, sucking, tight bands or traditional healers", "In poisoning, do not try to force vomiting", "Bring the poison container or a photo of the snake"], "dr": "এখনই ৯৯৯-এ ফোন করুন বা নিকটস্থ হাসপাতালে যান।", "dr_en": "Call 999 now or go to the nearest hospital.", "m": [], "fa": 1, "em": 1}, {"t": "হিটস্ট্রোক", "t_en": "Heatstroke", "k": ["হিটস্ট্রোক", "লু লাগা", "heatstroke", "গরমে অসুস্থ"], "tips": ["ছায়া বা ঠান্ডা জায়গায় নিন", "কাপড় ঢিলা করে ভেজা কাপড়ে শরীর মুছুন", "জ্ঞান থাকলে অল্প অল্প পানি বা স্যালাইন দিন"], "tips_en": ["Move to shade or a cool place", "Loosen clothing and wipe the body with a wet cloth", "If awake, give small sips of water or oral saline"], "dr": "জ্ঞান হারালে, খিঁচুনি হলে বা তাপমাত্রা খুব বেশি থাকলে এখনই ৯৯৯-এ ফোন করুন।", "dr_en": "Call 999 now if the person loses consciousness, has a seizure, or the temperature is very high.", "m": [], "fa": 1, "em": 1}, {"t": "ডেঙ্গু সন্দেহ", "t_en": "Suspected dengue", "k": ["ডেঙ্গু", "dengue"], "tips": ["প্রচুর তরল: খাবার স্যালাইন, ডাবের পানি, শরবত", "পূর্ণ বিশ্রাম নিন", "রক্ত পরীক্ষা ডাক্তারের পরামর্শে করান"], "tips_en": ["Drink plenty of fluids: oral saline, coconut water, juice", "Rest fully", "Get a blood test on a doctor's advice"], "dr": "পেটে ব্যথা, বারবার বমি, নাক-মাড়ি থেকে রক্ত, অতিরিক্ত দুর্বলতা বা জ্বর কমার পর অবনতি হলে এখনই হাসপাতালে যান।", "dr_en": "Go to hospital now if there is stomach pain, repeated vomiting, bleeding from the nose or gums, extreme weakness, or the condition worsens as the fever drops.", "m": [["প্যারাসিটামল (Paracetamol)", "জ্বর ও ব্যথায়। আইবুপ্রোফেন, ডাইক্লোফেনাক বা অ্যাসপিরিন খাবেন না।"]], "fa": 0, "em": 0}, {"t": "বমি / বমি বমি ভাব", "t_en": "Vomiting / nausea", "k": ["বমি", "বমি বমি", "nausea", "vomit"], "tips": ["অল্প অল্প তরল খান", "তেল-মশলাদার খাবার এড়ান"], "tips_en": ["Drink small amounts of fluid", "Avoid oily and spicy food"], "dr": "২৪ ঘণ্টার বেশি, রক্ত, তীব্র পেটব্যথা বা শিশু/বয়স্ক হলে ডাক্তার দেখান।", "dr_en": "See a doctor if it lasts more than 24 hours, there is blood, severe stomach pain, or the patient is a child or elderly.", "m": [["খাবার স্যালাইন (ORS)", "পানিশূন্যতা ঠেকাতে অল্প অল্প করে বারবার।"]], "fa": 0, "em": 0}, {"t": "পেটব্যথা", "t_en": "Stomach ache", "k": ["পেট ব্যথা", "পেটব্যথা", "stomach", "abdominal"], "tips": ["হালকা খাবার ও গরম পানি", "নিজে নিজে ব্যথানাশক খাবেন না"], "tips_en": ["Light food and warm water", "Do not take painkillers on your own"], "dr": "তীব্র, বারবার, জ্বর/বমিসহ বা তলপেটের ডানদিকে ব্যথা হলে (অ্যাপেনডিক্স সন্দেহ) এখনই ডাক্তার দেখান।", "dr_en": "See a doctor now if the pain is severe, keeps returning, comes with fever or vomiting, or is in the lower right abdomen (suspected appendicitis).", "m": [], "fa": 0, "em": 0}, {"t": "কোষ্ঠকাঠিন্য", "t_en": "Constipation", "k": ["কোষ্ঠকাঠিন্য", "কনস্টিপেশন", "constipation", "পায়খানা হয় না"], "tips": ["শাকসবজি, ফল ও পানি বেশি খান", "নিয়মিত হাঁটুন"], "tips_en": ["Eat more vegetables, fruit and water", "Walk regularly"], "dr": "সপ্তাহের বেশি, রক্ত বা তীব্র ব্যথা হলে ডাক্তার দেখান।", "dr_en": "See a doctor if it lasts more than a week, or there is blood or severe pain.", "m": [["ইসবগুলের ভুসি (Isabgol)", "পর্যাপ্ত পানির সাথে খেলে মল নরম হয়।"]], "fa": 0, "em": 0}, {"t": "ডায়াবেটিস / রক্তচাপ", "t_en": "Diabetes / blood pressure", "k": ["ডায়াবেটিস", "সুগার", "diabetes", "প্রেসার", "রক্তচাপ", "blood pressure"], "tips": ["ডাক্তারের ওষুধ নিজে বন্ধ বা বদল করবেন না", "চিনি ও লবণ কম খান, নিয়মিত হাঁটুন", "নিয়মিত পরীক্ষা করান"], "tips_en": ["Do not stop or change your doctor's medicine on your own", "Eat less sugar and salt, walk regularly", "Get regular check-ups"], "dr": "অতিরিক্ত তৃষ্ণা, ঝাপসা দেখা, মাথা ঘোরা, বুকে ব্যথা বা সুগার/প্রেসার হঠাৎ বেশি-কম হলে এখনই ডাক্তার দেখান।", "dr_en": "See a doctor now if you have extreme thirst, blurred vision, dizziness, chest pain, or your sugar or pressure suddenly goes too high or too low.", "m": [], "fa": 0, "em": 0}, {"t": "চোখের সমস্যা", "t_en": "Eye problem", "k": ["চোখ", "চোখ লাল", "চোখ উঠা", "eye"], "tips": ["পরিষ্কার পানিতে ধুয়ে নিন", "চোখ ঘষবেন না", "হাত ধুয়ে নিন, তোয়ালে আলাদা রাখুন"], "tips_en": ["Rinse with clean water", "Do not rub the eye", "Wash your hands and keep your towel separate"], "dr": "রাসায়নিক পড়লে ১৫ মিনিট পানিতে ধুয়ে সঙ্গে সঙ্গে হাসপাতালে যান। দৃষ্টি ঝাপসা বা তীব্র ব্যথায় ডাক্তার দেখান।", "dr_en": "If a chemical gets in, rinse with water for 15 minutes and go to hospital immediately. See a doctor for blurred vision or severe pain.", "m": [], "fa": 1, "em": 0}, {"t": "দাঁতব্যথা", "t_en": "Toothache", "k": ["দাঁত ব্যথা", "দাঁতব্যথা", "toothache"], "tips": ["কুসুম গরম লবণ-পানিতে কুলকুচি করুন", "দন্তচিকিৎসক দেখান"], "tips_en": ["Rinse with lukewarm salt water", "See a dentist"], "dr": "মুখ ফোলা বা জ্বর হলে দ্রুত দন্তচিকিৎসকের কাছে যান।", "dr_en": "See a dentist quickly if the face swells or there is fever.", "m": [["প্যারাসিটামল (Paracetamol)", "সাময়িক ব্যথা কমাতে।"]], "fa": 0, "em": 0}, {"t": "কাটা ও রক্তপাত", "t_en": "Cuts and bleeding", "k": ["কেটে", "কাটা", "রক্ত পড়", "bleeding", " cut"], "tips": ["পরিষ্কার কাপড় বা গজ দিয়ে ক্ষতস্থান ১০ মিনিট চেপে ধরুন", "হাত বা পা হলে হৃদপিণ্ডের ওপরে তুলে রাখুন", "রক্ত থামলে চলমান পরিষ্কার পানিতে ধুয়ে নিন", "পরিষ্কার ব্যান্ডেজ বা পট্টি লাগান"], "tips_en": ["Press clean cloth or gauze on the wound for 10 minutes", "If on an arm or leg, raise it above the heart", "Once bleeding stops, wash with clean running water", "Apply a clean bandage"], "dr": "১০ মিনিট চাপেও রক্ত না থামলে, ক্ষত গভীর বা ফাঁক হয়ে থাকলে, ময়লা বা মরচে ধরা জিনিসে কাটলে এখনই ডাক্তার/হাসপাতালে যান (টিটেনাস টিকা লাগতে পারে)।", "dr_en": "Go to a doctor or hospital now if bleeding does not stop after 10 minutes of pressure, the wound is deep or gaping, or it was caused by something dirty or rusty (a tetanus shot may be needed).", "m": [], "fa": 1, "em": 0}, {"t": "পোড়া", "t_en": "Burns", "k": ["পুড়ে", "পোড়া", "burn"], "tips": ["পোড়া জায়গা ২০ মিনিট চলমান ঠান্ডা (বরফ নয়) পানির নিচে রাখুন", "আংটি বা ঘড়ি খুলে ফেলুন", "পরিষ্কার কাপড়ে হালকা ঢেকে দিন", "টুথপেস্ট, তেল বা মাখন লাগাবেন না, ফোসকা ফাটাবেন না"], "tips_en": ["Hold the burn under cool (not ice) running water for 20 minutes", "Remove rings or watches", "Cover loosely with a clean cloth", "Do not apply toothpaste, oil or butter, and do not pop blisters"], "dr": "বড় জায়গা, মুখ-হাত-যৌনাঙ্গ, বড় ফোসকা বা বিদ্যুৎ/রাসায়নিকে পুড়লে এখনই হাসপাতালে যান।", "dr_en": "Go to hospital now for a large area, burns on the face, hands or genitals, big blisters, or electrical or chemical burns.", "m": [], "fa": 1, "em": 0}, {"t": "মাথা ঘোরা", "t_en": "Dizziness", "k": ["মাথা ঘোরা", "মাথা ঘুরছে", "মাথা ঘুরা", "dizzy", "dizziness"], "tips": ["সঙ্গে সঙ্গে বসে বা শুয়ে পড়ুন, পড়ে যাওয়া এড়ান", "ধীরে ধীরে পানি বা খাবার স্যালাইন পান করুন", "হঠাৎ উঠে দাঁড়াবেন না", "অনেকক্ষণ খালি পেটে থাকলে হালকা কিছু খান"], "tips_en": ["Sit or lie down immediately to avoid falling", "Drink water or oral saline slowly", "Do not stand up suddenly", "If you have been on an empty stomach for long, eat something light"], "dr": "অজ্ঞান হওয়া, বুকে ব্যথা, কথা জড়িয়ে যাওয়া, হাত-পা অবশ, তীব্র মাথাব্যথা বা বারবার হলে এখনই হাসপাতালে যান।", "dr_en": "Go to hospital now if there is fainting, chest pain, slurred speech, numb arms or legs, severe headache, or it keeps happening.", "m": [], "fa": 1, "em": 0}, {"t": "নাক দিয়ে রক্ত", "t_en": "Nosebleed", "k": ["নাক দিয়ে রক্ত", "নাকের রক্ত", "nosebleed"], "tips": ["সোজা হয়ে বসে সামনের দিকে ঝুঁকুন, পেছনে নয়", "নাকের নরম অংশ ১০ মিনিট চেপে ধরুন", "মুখ দিয়ে শ্বাস নিন"], "tips_en": ["Sit upright and lean forward, not backward", "Pinch the soft part of the nose for 10 minutes", "Breathe through your mouth"], "dr": "২০ মিনিটেও না থামলে বা আঘাতের পর হলে হাসপাতালে যান।", "dr_en": "Go to hospital if it does not stop in 20 minutes or it follows an injury.", "m": [], "fa": 1, "em": 0}, {"t": "মচকানো", "t_en": "Sprain", "k": ["মচকে", "মচকা", "sprain"], "tips": ["আক্রান্ত অংশ বিশ্রামে রাখুন", "কাপড়ে মোড়ানো বরফ ১৫-২০ মিনিট দিন", "হালকা চাপ দিয়ে ব্যান্ডেজ করুন", "উঁচু করে রাখুন"], "tips_en": ["Rest the affected part", "Apply ice wrapped in cloth for 15-20 minutes", "Bandage with light pressure", "Keep it raised"], "dr": "একদম নড়াতে না পারলে, আকার বেঁকে গেলে বা তীব্র ফোলা হলে ভাঙার সন্দেহে ডাক্তার দেখান।", "dr_en": "See a doctor for a possible fracture if it cannot be moved at all, looks bent, or is badly swollen.", "m": [], "fa": 1, "em": 0}, {"t": "জ্বর", "t_en": "Fever", "k": ["জ্বর", "jor", "jwor", "fever", "গা গরম"], "tips": ["প্রচুর পানি ও তরল খান", "বিশ্রাম নিন, পাতলা কাপড় পরুন"], "tips_en": ["Drink plenty of water and fluids", "Rest and wear light clothing"], "dr": "৩ দিনের বেশি জ্বর, ১০৩°F-এর ওপরে বা র‍্যাশ থাকলে ডাক্তার দেখান।", "dr_en": "See a doctor if fever lasts more than 3 days, is above 103°F, or there is a rash.", "m": [["প্যারাসিটামল (Paracetamol)", "জ্বর ও ব্যথা কমায়। প্যাকেটের গায়ে লেখা মাত্রা ও বিরতি মানুন।"]], "fa": 0, "em": 0}, {"t": "মাথাব্যথা", "t_en": "Headache", "k": ["মাথাব্যথা", "মাথা ব্যথা", "matha", "headache", "মাথা ধরা"], "tips": ["অন্ধকার শান্ত ঘরে বিশ্রাম নিন", "পানি পান করুন, ঘুম ঠিক রাখুন"], "tips_en": ["Rest in a dark, quiet room", "Drink water and keep a regular sleep routine"], "dr": "হঠাৎ তীব্র ব্যথা, বমি, ঝাপসা দেখা বা বারবার হলে ডাক্তার দেখান।", "dr_en": "See a doctor for sudden severe pain, vomiting, blurred vision, or if it keeps returning.", "m": [["প্যারাসিটামল (Paracetamol)", "সাধারণ মাথাব্যথায়। লেবেলের মাত্রা মানুন।"]], "fa": 0, "em": 0}, {"t": "সর্দি-কাশি", "t_en": "Cold and cough", "k": ["সর্দি", "কাশি", "নাক বন্ধ", "হাঁচি", "cold", "cough", "kashi", "sordi"], "tips": ["গরম পানির ভাপ নিন", "কুসুম গরম পানি পান করুন"], "tips_en": ["Inhale warm steam", "Drink lukewarm water"], "dr": "১ সপ্তাহের বেশি কাশি, শ্বাসের শব্দ বা বেশি জ্বর থাকলে ডাক্তার দেখান।", "dr_en": "See a doctor if the cough lasts more than 1 week, or there is wheezing or high fever.", "m": [["সেটিরিজিন (Cetirizine)", "নাক দিয়ে পানি পড়া ও হাঁচিতে। ঘুম ঘুম লাগতে পারে।"]], "fa": 0, "em": 0}, {"t": "গলাব্যথা", "t_en": "Sore throat", "k": ["গলাব্যথা", "গলা ব্যথা", "গলা খুসখুস", "sore throat", "gola"], "tips": ["কুসুম গরম লবণ-পানিতে গড়গড়া করুন", "গরম তরল খান"], "tips_en": ["Gargle with lukewarm salt water", "Drink warm fluids"], "dr": "গিলতে খুব কষ্ট, ৩ দিনের বেশি বা জ্বরসহ হলে ডাক্তার দেখান।", "dr_en": "See a doctor if swallowing is very painful, it lasts more than 3 days, or there is fever.", "m": [["গলার লজেন্স (Throat lozenge)", "গলার আরাম পেতে।"]], "fa": 0, "em": 0}, {"t": "গ্যাস্ট্রিক / অম্বল", "t_en": "Gastric / acidity", "k": ["গ্যাস", "গ্যাস্ট্রিক", "অম্বল", "বুক জ্বালা", "পেট জ্বালা", "acidity", "gastric"], "tips": ["অল্প অল্প করে খান", "তেল-মশলা ও চা-কফি কমান", "খাওয়ার পর সঙ্গে সঙ্গে শুয়ে পড়বেন না"], "tips_en": ["Eat small portions", "Cut down on oily, spicy food and tea or coffee", "Do not lie down right after eating"], "dr": "বারবার হলে, কালো পায়খানা বা বমিতে রক্ত থাকলে ডাক্তার দেখান।", "dr_en": "See a doctor if it keeps returning, or there is black stool or blood in vomit.", "m": [["অ্যান্টাসিড (Antacid)", "সাময়িক অম্বল ও বুক জ্বালায়।"]], "fa": 0, "em": 0}, {"t": "ডায়রিয়া", "t_en": "Diarrhea", "k": ["ডায়রিয়া", "পাতলা পায়খানা", "পাতলা পায়খানা", "diarrhea", "diarrhoea"], "tips": ["বেশি করে তরল ও ভাত-কলা জাতীয় হালকা খাবার খান"], "tips_en": ["Drink plenty of fluids and eat light food like rice and banana"], "dr": "পায়খানায় রক্ত, ২ দিনের বেশি, প্রস্রাব কমে যাওয়া বা শিশু/বয়স্ক হলে ডাক্তার দেখান।", "dr_en": "See a doctor if there is blood in stool, it lasts more than 2 days, urine decreases, or the patient is a child or elderly.", "m": [["খাবার স্যালাইন (ORS)", "শরীরে পানির ঘাটতি পূরণে। এটাই প্রধান চিকিৎসা।"]], "fa": 0, "em": 0}, {"t": "অ্যালার্জি / চুলকানি", "t_en": "Allergy / itching", "k": ["অ্যালার্জি", "এলার্জি", "চুলকানি", "allergy", "itch"], "tips": ["যা থেকে অ্যালার্জি হয় তা এড়ান"], "tips_en": ["Avoid whatever triggers the allergy"], "dr": "মুখ বা ঠোঁট ফোলা, শ্বাসকষ্ট হলে এখনই হাসপাতালে যান।", "dr_en": "Go to hospital now if the face or lips swell or breathing is difficult.", "m": [["সেটিরিজিন (Cetirizine)", "হালকা অ্যালার্জিতে। ঘুম ঘুম লাগতে পারে।"]], "fa": 0, "em": 0}, {"t": "কানে ব্যথা", "t_en": "Ear pain", "k": ["কানে ব্যথা", "কান ব্যথা", "কান ব্যাথা", "কানে পানি", "ear pain", "earache"], "tips": ["কানে কিছু ঢোকাবেন না, কাঠি বা তেল দেবেন না", "কান শুকনো রাখুন, গোসলের সময় কানে পানি ঢুকতে দেবেন না", "ব্যথার দিকে হালকা গরম সেঁক দিতে পারেন"], "tips_en": ["Do not put anything in the ear, no sticks or oil", "Keep the ear dry, do not let water in while bathing", "A light warm compress on the painful side may help"], "dr": "কান থেকে পুঁজ বা রক্ত পড়লে, জ্বর থাকলে, শুনতে কষ্ট হলে বা ২ দিনের বেশি ব্যথা থাকলে ডাক্তার দেখান।", "dr_en": "See a doctor if pus or blood comes from the ear, there is fever, hearing is difficult, or pain lasts more than 2 days.", "m": [["প্যারাসিটামল (Paracetamol)", "ব্যথা কমাতে। লেবেলের মাত্রা মানুন।"]], "fa": 0, "em": 0}, {"t": "ত্বকের সমস্যা / ফুসকুড়ি", "t_en": "Skin problem / rash", "k": ["চর্মরোগ", "ফুসকুড়ি", "র‍্যাশ", "ঘামাচি", "দাদ", "ত্বকে", "skin", "rash"], "tips": ["আক্রান্ত জায়গা পরিষ্কার ও শুকনো রাখুন", "চুলকালেও নখ দিয়ে চুলকাবেন না", "ঢিলেঢালা সুতির কাপড় পরুন", "নতুন সাবান, ক্রিম বা খাবারে সমস্যা হলে তা বন্ধ রাখুন"], "tips_en": ["Keep the area clean and dry", "Do not scratch with your nails", "Wear loose cotton clothes", "Stop any new soap, cream or food that may be causing it"], "dr": "জ্বরসহ র‍্যাশ, দ্রুত ছড়িয়ে পড়া, পুঁজ, মুখ বা ঠোঁট ফোলা বা শ্বাসকষ্ট হলে এখনই ডাক্তার দেখান।", "dr_en": "See a doctor now for a rash with fever, rapid spreading, pus, swelling of the face or lips, or difficulty breathing.", "m": [["সেটিরিজিন (Cetirizine)", "অ্যালার্জির কারণে চুলকানি হলে। ঘুম ঘুম লাগতে পারে।"]], "fa": 0, "em": 0}, {"t": "পিরিয়ডের ব্যথা", "t_en": "Period pain", "k": ["পিরিয়ড", "মাসিক", "মাসিকের ব্যথা", "তলপেটে ব্যথা", "period pain", "cramps"], "tips": ["তলপেটে হালকা গরম সেঁক দিন", "প্রচুর পানি পান করুন ও বিশ্রাম নিন", "হালকা হাঁটাহাঁটি বা স্ট্রেচিং আরাম দিতে পারে"], "tips_en": ["Apply a light warm compress to the lower abdomen", "Drink plenty of water and rest", "Gentle walking or stretching may help"], "dr": "ব্যথা অসহ্য হলে, রক্তপাত অনেক বেশি হলে, অজ্ঞান ভাব হলে বা গর্ভবতী হতে পারেন মনে হলে ডাক্তার দেখান।", "dr_en": "See a doctor if the pain is unbearable, bleeding is very heavy, you feel faint, or you think you may be pregnant.", "m": [["প্যারাসিটামল (Paracetamol)", "হালকা ব্যথায়। লেবেলের মাত্রা মানুন।"]], "fa": 0, "em": 0}, {"t": "প্রস্রাবে জ্বালা", "t_en": "Burning urine", "k": ["প্রস্রাবে জ্বালা", "প্রস্রাবে ব্যথা", "প্রস্রাব জ্বালা", "বারবার প্রস্রাব", "urine burning", "uti"], "tips": ["প্রচুর পানি পান করুন", "প্রস্রাব চেপে রাখবেন না", "নিজে নিজে অ্যান্টিবায়োটিক খাবেন না"], "tips_en": ["Drink plenty of water", "Do not hold urine in", "Do not take antibiotics on your own"], "dr": "জ্বর, কোমরে ব্যথা, প্রস্রাবে রক্ত থাকলে বা ২ দিনের বেশি হলে ডাক্তার দেখান। গর্ভাবস্থা, ডায়াবেটিস বা শিশুর ক্ষেত্রে দেরি করবেন না।", "dr_en": "See a doctor if there is fever, back pain, blood in urine, or it lasts more than 2 days. Do not delay in pregnancy, diabetes, or in a child.", "m": [], "fa": 0, "em": 0}, {"t": "শিশুর জ্বর", "t_en": "Child's fever", "k": ["শিশুর জ্বর", "বাচ্চার জ্বর", "বাচ্চার গা গরম", "শিশুর গা গরম", "baby fever", "child fever"], "tips": ["পাতলা কাপড় পরান, কুসুম গরম পানিতে ভেজা কাপড়ে গা মুছে দিন", "বুকের দুধ, খাবার স্যালাইন বা তরল বেশি করে দিন", "ওষুধ দিতে হলে ওজন অনুযায়ী মাত্রা ডাক্তার বা ফার্মাসিস্টের কাছ থেকে জেনে নিন, নিজে অনুমান করবেন না"], "tips_en": ["Dress the child lightly and wipe the body with a cloth in lukewarm water", "Give more breast milk, oral saline or fluids", "If medicine is needed, ask a doctor or pharmacist for a weight-based dose, do not guess"], "dr": "৩ মাসের কম বয়সী শিশুর যেকোনো জ্বরে, ১০৩°F-এর ওপরে, খিঁচুনি, অতিরিক্ত ঝিমানো, খেতে না চাওয়া বা র‍্যাশ থাকলে এখনই ডাক্তার দেখান।", "dr_en": "See a doctor now for any fever in a baby under 3 months, above 103°F, a seizure, extreme drowsiness, refusing to feed, or a rash.", "m": [], "fa": 0, "em": 0}, {"t": "শিশুর সর্দি-কাশি", "t_en": "Child's cold and cough", "k": ["শিশুর সর্দি", "বাচ্চার সর্দি", "শিশুর কাশি", "বাচ্চার কাশি", "বাচ্চার নাক বন্ধ", "baby cold", "child cough"], "tips": ["বুকের দুধ বা তরল খাওয়ান", "ঘর আর্দ্র রাখুন, ধুলাবালি ও ধোঁয়া থেকে দূরে রাখুন", "নিজে থেকে কাশির সিরাপ বা অ্যান্টিবায়োটিক দেবেন না"], "tips_en": ["Give breast milk or fluids", "Keep the room humid and away from dust and smoke", "Do not give cough syrup or antibiotics on your own"], "dr": "দ্রুত বা কষ্টের শ্বাস, বুক দেবে যাওয়া, ঠোঁট নীলচে, খেতে না পারা বা ৩ দিনের বেশি জ্বর থাকলে এখনই হাসপাতালে যান।", "dr_en": "Go to hospital now for fast or difficult breathing, chest indrawing, bluish lips, inability to feed, or fever beyond 3 days.", "m": [], "fa": 0, "em": 0}, {"t": "শিশুর ডায়রিয়া", "t_en": "Child's diarrhea", "k": ["শিশুর ডায়রিয়া", "বাচ্চার ডায়রিয়া", "বাচ্চার পাতলা পায়খানা", "শিশুর পাতলা পায়খানা", "baby diarrhea", "child diarrhea"], "tips": ["বুকের দুধ ও স্বাভাবিক খাবার চালু রাখুন", "স্যালাইনে প্যাকেটে লেখা পরিমাণ পানি মাপুন, কম বা বেশি করবেন না"], "tips_en": ["Continue breast milk and normal food", "Measure the water exactly as written on the packet, no more and no less"], "dr": "পায়খানায় রক্ত, বারবার বমি, ৬-৮ ঘণ্টা প্রস্রাব না হওয়া, চোখ বসা, মুখ শুকনো বা খুব নেতিয়ে পড়লে এখনই হাসপাতালে যান।", "dr_en": "Go to hospital now for blood in stool, repeated vomiting, no urine for 6-8 hours, sunken eyes, dry mouth, or if the child is very limp.", "m": [["খাবার স্যালাইন (ORS)", "প্যাকেটের গায়ের নিয়মে বানিয়ে অল্প অল্প করে বারবার খাওয়ান। এটাই প্রধান চিকিৎসা।"]], "fa": 0, "em": 0}, {"t": "ম্যালেরিয়া সন্দেহ", "t_en": "Suspected malaria", "k": ["ম্যালেরিয়া", "malaria", "কাঁপুনি দিয়ে জ্বর"], "tips": ["কাঁপুনি দিয়ে জ্বর আসা-যাওয়া করলে দেরি না করে রক্ত পরীক্ষা করান", "মশারি ব্যবহার করুন, মশা কামড় এড়ান", "পরীক্ষা ছাড়া নিজে ওষুধ খাবেন না"], "tips_en": ["If fever comes and goes with shivering, get a blood test without delay", "Use a mosquito net and avoid mosquito bites", "Do not take medicine without a test"], "dr": "পাহাড়ি বা সীমান্ত এলাকায় থাকলে বা ভ্রমণ করে থাকলে দ্রুত পরীক্ষা করান। অজ্ঞান ভাব, খিঁচুনি বা খুব দুর্বল হলে এখনই হাসপাতালে যান।", "dr_en": "Get tested quickly if you live in or travelled to a hilly or border area. Go to hospital now for drowsiness, seizures or extreme weakness.", "m": [], "fa": 0, "em": 0}, {"t": "টাইফয়েড সন্দেহ", "t_en": "Suspected typhoid", "k": ["টাইফয়েড", "typhoid"], "tips": ["নিরাপদ পানি ও ভালো করে রান্না করা খাবার খান", "প্রচুর তরল ও বিশ্রাম নিন", "নিজে অ্যান্টিবায়োটিক খাবেন না"], "tips_en": ["Drink safe water and eat well-cooked food", "Take plenty of fluids and rest", "Do not take antibiotics on your own"], "dr": "কয়েক দিন ধরে বাড়তে থাকা জ্বর, পেটব্যথা, দুর্বলতা বা কালো পায়খানা হলে ডাক্তার দেখান ও পরীক্ষা করান।", "dr_en": "See a doctor and get tested if fever keeps rising over several days, or there is stomach pain, weakness or black stool.", "m": [], "fa": 0, "em": 0}, {"t": "চিকুনগুনিয়া / গাঁটে ব্যথা", "t_en": "Chikungunya / joint pain", "k": ["চিকুনগুনিয়া", "chikungunya", "গাঁটে ব্যথা", "জয়েন্টে ব্যথা"], "tips": ["বিশ্রাম নিন ও প্রচুর তরল খান", "জমা পানি পরিষ্কার রাখুন, মশারি ব্যবহার করুন", "ব্যথার ওষুধ খাওয়ার আগে ডাক্তারের পরামর্শ নিন, কারণ ডেঙ্গু হলে কিছু ব্যথার ওষুধ ঝুঁকিপূর্ণ"], "tips_en": ["Rest and drink plenty of fluids", "Clear stagnant water and use a mosquito net", "Ask a doctor before taking painkillers, because some are risky if it is dengue"], "dr": "জ্বরের সঙ্গে প্রচণ্ড গাঁটে ব্যথা বা র‍্যাশ হলে ডাক্তার দেখিয়ে ডেঙ্গু পরীক্ষা করান।", "dr_en": "If fever comes with severe joint pain or rash, see a doctor and get tested for dengue.", "m": [], "fa": 0, "em": 0}, {"t": "জন্ডিস", "t_en": "Jaundice", "k": ["জন্ডিস", "jaundice", "চোখ হলুদ", "প্রস্রাব হলুদ"], "tips": ["বিশ্রাম নিন ও পরিষ্কার পানি পান করুন", "হালকা ও কম তেলের খাবার খান", "ঝাড়ফুঁক বা অজানা ওষুধ থেকে দূরে থাকুন"], "tips_en": ["Rest and drink clean water", "Eat light, low-oil food", "Stay away from traditional healers or unknown medicines"], "dr": "চোখ বা শরীর হলুদ হলে ডাক্তার দেখান। নবজাতকের জন্ডিস, বমি, অজ্ঞান ভাব বা পেট ফোলা হলে এখনই হাসপাতালে যান।", "dr_en": "See a doctor if the eyes or body turn yellow. Go to hospital now for newborn jaundice, vomiting, drowsiness or a swollen belly.", "m": [], "fa": 0, "em": 0}, {"t": "পানিশূন্যতা", "t_en": "Dehydration", "k": ["পানিশূন্যতা", "ডিহাইড্রেশন", "dehydration", "মুখ শুকিয়ে"], "tips": ["গরমে বা অসুস্থতায় বেশি করে তরল খান", "প্রস্রাবের রং গাঢ় হলে আরও পানি খান"], "tips_en": ["Drink more fluids in hot weather or illness", "If urine is dark, drink more water"], "dr": "প্রস্রাব না হওয়া, অজ্ঞান ভাব, খুব দুর্বলতা বা তরল খেতে না পারলে এখনই হাসপাতালে যান।", "dr_en": "Go to hospital now if there is no urine, drowsiness, extreme weakness, or the person cannot keep fluids down.", "m": [["খাবার স্যালাইন (ORS)", "প্যাকেটের নিয়মে বানিয়ে অল্প অল্প করে বারবার খান।"]], "fa": 0, "em": 0}, {"t": "কৃমি", "t_en": "Worms", "k": ["কৃমি", "worm", "পায়ুপথে চুলকানি"], "tips": ["খাওয়ার আগে ও টয়লেটের পরে সাবান দিয়ে হাত ধুয়ে নিন", "নখ ছোট রাখুন, খালি পায়ে মাটিতে হাঁটবেন না", "পরিবারের সবার একসাথে চিকিৎসা লাগতে পারে, তাই ডাক্তার বা ফার্মাসিস্টের পরামর্শ নিন"], "tips_en": ["Wash hands with soap before eating and after the toilet", "Keep nails short and do not walk barefoot on soil", "The whole family may need treatment, so ask a doctor or pharmacist"], "dr": "পেটব্যথা, ওজন কমে যাওয়া, রক্তস্বল্পতা বা শিশুর বারবার হলে ডাক্তার দেখান।", "dr_en": "See a doctor for stomach pain, weight loss, anemia, or if it keeps returning in a child.", "m": [], "fa": 0, "em": 0}, {"t": "মুখের ঘা", "t_en": "Mouth ulcer", "k": ["মুখে ঘা", "মুখের ঘা", "মুখ পাকা", "mouth ulcer"], "tips": ["কুসুম গরম লবণ-পানিতে কুলকুচি করুন", "ঝাল, টক ও গরম খাবার এড়ান", "নরম ও ঠান্ডা খাবার খান"], "tips_en": ["Rinse with lukewarm salt water", "Avoid spicy, sour and hot food", "Eat soft, cool food"], "dr": "২ সপ্তাহের বেশি না সারলে, খেতে না পারলে বা বারবার হলে ডাক্তার দেখান।", "dr_en": "See a doctor if it does not heal in 2 weeks, you cannot eat, or it keeps returning.", "m": [], "fa": 0, "em": 0}, {"t": "কোমর / পিঠ ব্যথা", "t_en": "Back / waist pain", "k": ["কোমর ব্যথা", "কোমরে ব্যথা", "পিঠে ব্যথা", "পিঠ ব্যথা", "back pain"], "tips": ["সারাদিন শুয়ে না থেকে হালকা চলাফেরা করুন", "গরম সেঁক দিন", "ভারী জিনিস তুলবেন না, সোজা হয়ে বসুন"], "tips_en": ["Do not stay in bed all day, move around gently", "Apply a warm compress", "Do not lift heavy things and sit upright"], "dr": "পায়ে অবশ ভাব, প্রস্রাব-পায়খানা আটকে রাখতে না পারা, জ্বর বা আঘাতের পর ব্যথা হলে এখনই ডাক্তার দেখান।", "dr_en": "See a doctor now for numbness in the legs, loss of urine or stool control, fever, or pain after an injury.", "m": [["প্যারাসিটামল (Paracetamol)", "হালকা ব্যথায়। লেবেলের মাত্রা মানুন।"]], "fa": 0, "em": 0}, {"t": "হাঁপানি / শ্বাসে শব্দ", "t_en": "Asthma / wheezing", "k": ["হাঁপানি", "অ্যাজমা", "asthma", "শ্বাসে শব্দ"], "tips": ["সোজা হয়ে বসুন, ধীরে শ্বাস নিন", "ধুলা, ধোঁয়া ও ঠান্ডা এড়ান", "ডাক্তারের দেওয়া ইনহেলার থাকলে নির্দেশমতো ব্যবহার করুন"], "tips_en": ["Sit upright and breathe slowly", "Avoid dust, smoke and cold", "If you have an inhaler from your doctor, use it as directed"], "dr": "কথা বলতে কষ্ট, ঠোঁট নীলচে বা ইনহেলারে আরাম না পেলে এখনই ৯৯৯-এ ফোন করুন বা হাসপাতালে যান।", "dr_en": "Call 999 or go to hospital now if speaking is difficult, lips turn bluish, or the inhaler does not help.", "m": [], "fa": 0, "em": 0}, {"t": "গর্ভাবস্থার যত্ন", "t_en": "Pregnancy care", "k": ["গর্ভাবস্থা", "গর্ভবতী", "প্রেগন্যান্ট", "pregnancy", "pregnant"], "tips": ["নিয়মিত ডাক্তার বা স্বাস্থ্যকর্মীর কাছে চেকআপ করান", "ডাক্তারের পরামর্শ ছাড়া কোনো ওষুধ খাবেন না", "পুষ্টিকর খাবার, পর্যাপ্ত পানি ও বিশ্রাম নিন", "ধূমপান ও তামাক এড়ান"], "tips_en": ["Have regular check-ups with a doctor or health worker", "Do not take any medicine without a doctor's advice", "Eat nutritious food, drink enough water and rest", "Avoid smoking and tobacco"], "dr": "রক্তপাত, তীব্র পেটব্যথা, ভ্রূণের নড়াচড়া কমে যাওয়া, প্রচণ্ড মাথাব্যথা, ঝাপসা দেখা, মুখ-হাত ফোলা বা খিঁচুনি হলে এখনই হাসপাতালে যান।", "dr_en": "Go to hospital now for bleeding, severe stomach pain, reduced baby movement, severe headache, blurred vision, swelling of the face or hands, or a seizure.", "m": [], "fa": 0, "em": 0}, {"t": "বুকের দুধ ও নবজাতক", "t_en": "Breastfeeding and newborn", "k": ["বুকের দুধ", "স্তন্যদান", "breastfeeding", "নবজাতক"], "tips": ["জন্মের পর ১ ঘণ্টার মধ্যে ও ৬ মাস পর্যন্ত শুধু বুকের দুধ দিন", "মা নিজে প্রচুর পানি ও পুষ্টিকর খাবার খান", "মা ওষুধ খাওয়ার আগে ডাক্তার বা ফার্মাসিস্টকে জানান যে বুকের দুধ খাওয়াচ্ছেন"], "tips_en": ["Start breastfeeding within 1 hour of birth and give only breast milk for 6 months", "The mother should drink plenty of water and eat nutritious food", "Before taking any medicine, tell the doctor or pharmacist that you are breastfeeding"], "dr": "শিশু দুধ না খেলে, স্তনে ব্যথা-লালচে ভাব ও জ্বর হলে বা নবজাতকের জ্বর, জন্ডিস ও শ্বাসকষ্ট হলে এখনই ডাক্তার দেখান।", "dr_en": "See a doctor now if the baby is not feeding, the breast is painful and red with fever, or the newborn has fever, jaundice or trouble breathing.", "m": [], "fa": 0, "em": 0}, {"t": "মানসিক চাপ / দুশ্চিন্তা", "t_en": "Stress / anxiety", "k": ["মানসিক চাপ", "দুশ্চিন্তা", "টেনশন", "stress", "anxiety", "মন খারাপ"], "tips": ["ধীরে গভীর শ্বাস নিন: ৪ গুনে নিন, ৪ গুনে ছাড়ুন", "বিশ্বস্ত কারও সঙ্গে মন খুলে কথা বলুন", "নিয়মিত ঘুম, খাবার ও হালকা হাঁটার অভ্যাস রাখুন"], "tips_en": ["Breathe slowly and deeply: in for 4 counts, out for 4 counts", "Talk openly with someone you trust", "Keep regular sleep, meals and light walks"], "dr": "কয়েক সপ্তাহ ধরে মন খারাপ, কাজে আগ্রহ না থাকা বা দৈনন্দিন কাজে সমস্যা হলে মানসিক স্বাস্থ্য বিশেষজ্ঞ দেখান। স্বাস্থ্য বাতায়ন: ১৬২৬৩।", "dr_en": "See a mental health specialist if low mood lasts several weeks, you lose interest in things, or daily life is affected. Shasthya Batayon: 16263.", "m": [], "fa": 0, "em": 0}, {"t": "ঘুমের সমস্যা", "t_en": "Sleep problems", "k": ["ঘুম হয় না", "ঘুমের সমস্যা", "অনিদ্রা", "insomnia", "ঘুম আসে না"], "tips": ["রোজ একই সময়ে ঘুমাতে যান ও উঠুন", "ঘুমের ১ ঘণ্টা আগে মোবাইল বন্ধ রাখুন", "বিকেলের পর চা-কফি এড়ান", "নিজে ঘুমের ওষুধ খাবেন না"], "tips_en": ["Go to bed and wake up at the same time every day", "Keep the phone away 1 hour before sleep", "Avoid tea and coffee after afternoon", "Do not take sleeping pills on your own"], "dr": "২ সপ্তাহের বেশি ঘুমের সমস্যা, নাক ডাকার সঙ্গে শ্বাস আটকে যাওয়া বা দিনে খুব ঘুম পেলে ডাক্তার দেখান।", "dr_en": "See a doctor if sleep problems last more than 2 weeks, snoring comes with pauses in breathing, or you feel very sleepy in the day.", "m": [], "fa": 0, "em": 0}, {"t": "শিশুর টিকা (EPI)", "t_en": "Child vaccines (EPI)", "k": ["টিকা", "ভ্যাকসিন", "vaccine", "vaccination", "ইপিআই"], "tips": ["জন্মের সময়: বিসিজি", "৬, ১০ ও ১৪ সপ্তাহ: পেন্টাভ্যালেন্ট ও পোলিও", "৯ ও ১৫ মাস: হাম-রুবেলা (MR)", "PCV, IPV ও অন্যান্য টিকার সময় সূচি বদলাতে পারে, তাই নিকটস্থ EPI কেন্দ্র বা স্বাস্থ্যকর্মীর কাছ থেকে হালনাগাদ তালিকা জেনে নিন", "টিকার কার্ড যত্নে রাখুন"], "tips_en": ["At birth: BCG", "6, 10 and 14 weeks: Pentavalent and Polio", "9 and 15 months: Measles-Rubella (MR)", "The schedule for PCV, IPV and other vaccines may change, so get the updated list from the nearest EPI center or health worker", "Keep the vaccine card safe"], "dr": "টিকা দেওয়ার পর তীব্র জ্বর, খিঁচুনি বা অজ্ঞান ভাব হলে এখনই ডাক্তার দেখান।", "dr_en": "See a doctor now if there is high fever, seizure or fainting after a vaccine.", "m": [], "fa": 0, "em": 0}];
+var BASE_VX=[{"id": "bcg", "bn": "জন্মের সময়: বিসিজি", "en": "At birth: BCG", "days": 0, "months": 0}, {"id": "w6", "bn": "৬ সপ্তাহ: পেন্টাভ্যালেন্ট ও পোলিও", "en": "6 weeks: Pentavalent and Polio", "days": 42, "months": 0}, {"id": "w10", "bn": "১০ সপ্তাহ: পেন্টাভ্যালেন্ট ও পোলিও", "en": "10 weeks: Pentavalent and Polio", "days": 70, "months": 0}, {"id": "w14", "bn": "১৪ সপ্তাহ: পেন্টাভ্যালেন্ট ও পোলিও", "en": "14 weeks: Pentavalent and Polio", "days": 98, "months": 0}, {"id": "m9", "bn": "৯ মাস: হাম-রুবেলা (MR)", "en": "9 months: Measles-Rubella (MR)", "days": 0, "months": 9}, {"id": "m15", "bn": "১৫ মাস: হাম-রুবেলা (MR)", "en": "15 months: Measles-Rubella (MR)", "days": 0, "months": 15}];
+var BASE_EMG=[{"num": "999", "bn": "জাতীয় জরুরি সেবা: পুলিশ, ফায়ার, অ্যাম্বুলেন্স", "en": "National emergency service: police, fire, ambulance"}, {"num": "16263", "bn": "স্বাস্থ্য বাতায়ন: স্বাস্থ্য পরামর্শ", "en": "Shasthyo Batayon: health advice"}, {"num": "102", "bn": "ফায়ার সার্ভিস ও সিভিল ডিফেন্স", "en": "Fire Service and Civil Defence"}, {"num": "109", "bn": "নারী ও শিশু নির্যাতন প্রতিরোধ হেল্পলাইন", "en": "Helpline against violence on women and children"}, {"num": "1098", "bn": "শিশু হেল্পলাইন", "en": "Child helpline"}, {"num": "333", "bn": "জাতীয় তথ্য ও সেবা কল সেন্টার", "en": "National information and service call centre"}];
+
+/* ===================== v2: dashboard, content manager, reports, backup, alerts ===================== */
+Object.assign(D,{t_dash:["ড্যাশবোর্ড","Dashboard"],t_content:["কনটেন্ট","Content"],t_rep:["রিপোর্ট","Reports"],t_backup:["ব্যাকআপ","Backup"]});
+function h(tag,a,k){var e=document.createElement(tag);a=a||{};
+ for(var n in a){var v=a[n];if(n==="class")e.className=v;else if(n==="text")e.textContent=v;else if(n==="value")e.value=v;else if(n==="checked")e.checked=!!v;else if(n.slice(0,2)==="on")e[n]=v;else if(v!==false&&v!=null)e.setAttribute(n,v===true?"":v)}
+ (k||[]).forEach(function(c){if(c==null)return;e.appendChild(typeof c==="string"?document.createTextNode(c):c)});return e}
+function fld(label,node,full){var l=h("label",{class:full?"full":""},[h("span",{text:label}),node]);return l}
+function cl(x){return JSON.parse(JSON.stringify(x))}
+function toLocal(ms){if(!ms)return"";var d=new Date(ms),p=function(n){return String(n).padStart(2,"0")};return d.getFullYear()+"-"+p(d.getMonth()+1)+"-"+p(d.getDate())+"T"+p(d.getHours())+":"+p(d.getMinutes())}
+function fromLocal(v){if(!v)return 0;var t=new Date(v).getTime();return isNaN(t)?0:t}
+function goTab(t){var b=document.querySelector('.tb[data-tab="'+t+'"]');if(b)b.click()}
+try{var TB=document.querySelector('.tabs');if(TB)TB.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('.tb');if(b&&b.scrollIntoView)b.scrollIntoView({inline:'center',block:'nearest',behavior:'smooth'})})}catch(e){}
+function splitL(v){return String(v||"").split(/\n+/).map(function(x){return x.trim()}).filter(Boolean)}
+function splitK(v){return String(v||"").split(/[,\n،]+/).map(function(x){return x.trim()}).filter(Boolean)}
+function sw(label,checked,onchg){var i=h("input",{type:"checkbox",checked:checked});i.onchange=function(){onchg(i.checked)};return h("label",{class:"sw"},[i,h("span",{class:"trk"}),h("span",{text:label})])}
+
+/* --- language refresh for new static text --- */
+var _al=applyLang;applyLang=function(){_al();
+ document.querySelectorAll("[data-bn]").forEach(function(e){e.textContent=LANG==="bn"?e.dataset.bn:e.dataset.en});
+ document.querySelectorAll("[data-pbn]").forEach(function(e){e.placeholder=LANG==="bn"?e.dataset.pbn:e.dataset.pen});
+ paintBadge();if(window.rer2)window.rer2()};
+
+/* ================= Dashboard ================= */
+var DASH=null,NEWREP=0;
+async function loadDash(){var r=await call("/admin/dash","GET");if(r.d.ok){DASH=r.d;NEWREP=r.d.new_reports;rDash();paintBadge()}}
+function paintBadge(){var b=document.querySelector('.tb[data-tab="rep"]');if(!b)return;var n=NEWREP;b.textContent=T("t_rep")+(n?" ("+n+")":"")}
+async function quick(obj){if(!DEFS)await loadSet();var ok=await postSet(obj,L("সেভ হয়েছে।","Saved."));loadDash();return ok}
+function kp(v,l,go){var d=h("div",{class:"kpi"+(go?" click":"")},[h("b",{text:(+v).toLocaleString()}),h("span",{text:l})]);if(go)d.onclick=function(){goTab(go)};return d}
+function rDash(){var b=$("dashb");b.innerHTML="";var d=DASH;if(!d)return;var t=d.today||{},q=(t.req_chat||0)+(t.req_symptom||0)+(t.req_medicine||0);
+ b.appendChild(h("div",{class:"kpis4"},[kp(q,T("k_req")),kp(t.err||0,T("k_err")),kp(t.tok||0,T("k_tok")),kp(d.new_reports,L("নতুন রিপোর্ট","New reports"),"rep")]));
+ var g=h("div",{class:"grp"});g.appendChild(h("b",{text:L("এখনই চালু/বন্ধ","Quick switches")}));
+ g.appendChild(sw(L("AI সহায়ক চালু","AI helper on"),d.ai_on,function(v){quick({ai_on:v})}));
+ g.appendChild(sw(L("রক্ষণাবেক্ষণ মোড","Maintenance mode"),d.maint,function(v){quick({maint:{on:v}})}));
+ g.appendChild(h("p",{class:"hint",text:L("রক্ষণাবেক্ষণ চালু করলে সাইটে পুরো পর্দায় বার্তা দেখাবে (বার্তা সাইট ট্যাবে লিখুন)।","Maintenance shows a full-screen message on the site (write it in the Site tab).")}));
+ b.appendChild(g);
+ var f=h("div",{class:"grp"});f.appendChild(h("b",{text:L("ফিচার অনুযায়ী AI","AI by feature")}));
+ [["chat",L("চ্যাট","Chat")],["symptom",L("লক্ষণ বিশ্লেষণ","Symptom check")],["medicine",L("ওষুধের তথ্য","Medicine info")]].forEach(function(x){
+  f.appendChild(sw(x[1],d.features[x[0]]!==false,function(v){var o={};o[x[0]]=v;quick({features:o})}))});
+ f.appendChild(h("p",{class:"hint",text:L("বন্ধ করা ফিচারে ব্যবহারকারী \"AI সহায়ক বন্ধ\" বার্তা দেখবে; বাকি ফিচার চলবে।","A switched-off feature shows the \"AI helper is off\" message; the others keep working.")}));
+ b.appendChild(f);
+ var c=d.content,cg=h("div",{class:"grp"});cg.appendChild(h("b",{text:L("কনটেন্ট সারাংশ","Content summary")}));
+ var rows=[[L("নিজের যোগ করা লক্ষণ/গাইড","Added symptoms/guides"),c.symptoms],[L("বিল্ট-ইন গাইড বদলানো/লুকানো","Built-in guides edited/hidden"),c.edits],[L("যোগ করা ওষুধ","Added medicines"),c.meds],[L("লুকানো ব্র্যান্ড","Hidden brands"),c.med_hide],[L("হাসপাতাল/ফার্মেসি","Hospitals/pharmacies"),c.hospitals],[L("টিপস","Tips"),c.tips],[L("জরুরি নম্বর","Emergency numbers"),c.emergency<0?L("বিল্ট-ইন","built-in"):c.emergency],[L("টিকা তালিকা","Vaccine list"),c.vaccines<0?L("বিল্ট-ইন","built-in"):c.vaccines]];
+ var l=h("div",{class:"lst"});rows.forEach(function(r){l.appendChild(h("div",{class:"it"},[h("span",{text:r[0]}),h("span",{text:String(r[1])})]))});cg.appendChild(l);
+ var go=h("button",{class:"alt",text:L("কনটেন্ট এডিট করুন","Edit content"),onclick:function(){goTab("content")}});cg.appendChild(go);b.appendChild(cg);
+ var a=h("div",{class:"grp"});a.appendChild(h("b",{text:L("অ্যালার্ট","Alerts")}));
+ a.appendChild(h("p",{class:"hint",text:(d.tg?L("Telegram যুক্ত আছে। ","Telegram is connected. "):L("Telegram এখনো যুক্ত নয়। ","Telegram is not connected yet. "))+(d.alert.on?L("অ্যালার্ট চালু।","Alerts are on."):L("অ্যালার্ট বন্ধ। নিরাপত্তা ট্যাবে চালু করুন।","Alerts are off. Turn them on in the Security tab."))}));
+ b.appendChild(a)}
+$("dashrf").onclick=loadDash;
+
+/* ================= Reports ================= */
+var RPD=null,RFILT="new";
+async function loadRep(){var r=await call("/admin/reports","GET");if(r.d.ok){RPD=r.d.reports;cntRep();rRep()}}
+function cntRep(){NEWREP=(RPD||[]).filter(function(x){return x.st!=="done"}).length;if(DASH)DASH.new_reports=NEWREP;paintBadge()}
+async function repAct(b){var r=await call("/admin/reports","POST",b);if(r.d.ok){RPD=r.d.reports;cntRep();rRep()}}
+function rRep(){var f=$("repf");f.innerHTML="";var nNew=(RPD||[]).filter(function(x){return x.st!=="done"}).length;
+ [["new",L("নতুন","New")+" ("+nNew+")"],["done",L("সমাধান","Resolved")],["all",L("সব","All")]].forEach(function(x){var b=h("button",{type:"button",text:x[1],class:RFILT===x[0]?"on":"",onclick:function(){RFILT=x[0];rRep()}});f.appendChild(b)});
+ var w=$("repl");w.innerHTML="";if(!RPD)return;
+ var list=RPD.filter(function(x){return RFILT==="all"||(RFILT==="done"?x.st==="done":x.st!=="done")});
+ if(!list.length){w.appendChild(h("p",{class:"hint",text:L("কোনো রিপোর্ট নেই।","No reports.")}));return}
+ list.forEach(function(x){var c=h("div",{class:"grp rpc"});
+  c.appendChild(h("small",{text:fmt(x.t)+" · "+(x.lang==="en"?"English":"বাংলা")+(x.st==="done"?" · ✓":"")}));
+  if(x.note)c.appendChild(h("div",{class:"note",text:x.note}));
+  if(x.q)c.appendChild(h("div",{class:"hint",text:L("প্রশ্ন: ","Question: ")+x.q}));
+  if(x.a)c.appendChild(h("details",{},[h("summary",{text:L("সাইটের উত্তর","Answer shown")}),h("div",{class:"out",text:x.a})]));
+  var r=h("div",{class:"row"});
+  r.appendChild(h("button",{class:"sm",type:"button",text:x.st==="done"?L("আবার খুলুন","Reopen"):L("সমাধান হয়েছে","Mark resolved"),onclick:function(){repAct({id:x.id,status:x.st==="done"?"new":"done"})}}));
+  r.appendChild(h("button",{class:"sm alt",type:"button",text:L("কনটেন্ট ঠিক করুন","Fix content"),onclick:function(){goTab("content")}}));
+  r.appendChild(h("button",{class:"sm danger",type:"button",text:L("মুছুন","Delete"),onclick:function(){repAct({delete:x.id})}}));
+  c.appendChild(r);w.appendChild(c)})}
+$("repclr").onclick=function(){repAct({clear_done:true})};$("reprf").onclick=loadRep;
+
+/* ================= Content manager ================= */
+var CT=null,CSUB="sym",CDIRTY=false,CQ="",EDIT=null;
+var SUBS=[["sym","লক্ষণ ও প্রাথমিক চিকিৎসা","Symptoms & first aid"],["med","ওষুধ","Medicines"],["emg","জরুরি নম্বর","Emergency numbers"],["hos","হাসপাতাল/ফার্মেসি","Hospitals & pharmacies"],["vax","টিকা","Vaccines"],["tip","টিপস","Tips"],["leg","অতিরিক্ত নোট","Notes"]];
+function ctDef(c){c=c||{};c.symptoms=c.symptoms||[];c.sym_edit=c.sym_edit||{};c.meds=c.meds||[];c.med_hide=c.med_hide||[];c.hospitals=c.hospitals||[];c.tips=c.tips||[];c.legal=c.legal||{bn:"",en:""};if(!Array.isArray(c.emergency))c.emergency=null;if(!Array.isArray(c.vaccines))c.vaccines=null;return c}
+async function loadContent(){var r=await call("/admin/content","GET");if(r.d.ok){CT=ctDef(r.d.content);CDIRTY=false;EDIT=null;paintBar();rCont()}}
+function dirty(){CDIRTY=true;paintBar()}
+function paintBar(){$("cbar").hidden=!CDIRTY}
+$("csave").onclick=async function(){var r=await call("/admin/content","POST",{content:CT});
+ if(r.d.ok){CT=ctDef(r.d.content);CDIRTY=false;EDIT=null;paintBar();rCont();say(L("কনটেন্ট সেভ হয়েছে। সাইটে ১ মিনিটের মধ্যে দেখা যাবে।","Content saved. It shows on the site within a minute."),"ok")}
+ else if(r.s!==401)say(r.d.error==="too_big"?L("কনটেন্ট অনেক বড় হয়ে গেছে। কিছু কমান।","Content is too large. Remove some."):L("সেভ হয়নি: ","Not saved: ")+(r.d.error||r.s),"err")};
+window.addEventListener("beforeunload",function(e){if(CDIRTY){e.preventDefault();e.returnValue=""}});
+function rSubs(){var s=$("csub");s.innerHTML="";SUBS.forEach(function(x){s.appendChild(h("button",{type:"button",class:CSUB===x[0]?"on":"",text:L(x[1],x[2]),onclick:function(){CSUB=x[0];EDIT=null;rCont()}}))})}
+function rCont(){rSubs();var b=$("cbody");b.innerHTML="";if(!CT){b.appendChild(h("p",{class:"hint",text:L("লোড হচ্ছে…","Loading…")}));return}
+ ({sym:rSym,med:rMed,emg:rEmg,hos:rHos,vax:rVax,tip:rTip,leg:rLeg})[CSUB](b)}
+
+/* ---- symptoms & first aid ---- */
+function mStr(m){return (m||[]).map(function(p){return p[0]+(p[1]?" | "+p[1]:"")}).join("\n")}
+function mParse(v){return splitL(v).map(function(x){var i=x.indexOf("|");return i<0?[x.trim(),""]:[x.slice(0,i).trim(),x.slice(i+1).trim()]}).filter(function(p){return p[0]})}
+function symForm(v,o){var f=h("div",{class:"grp edit"});
+ var t=h("input",{value:v.t||"",maxlength:80}),te=h("input",{value:v.t_en||"",maxlength:80});if(o.builtin)t.disabled=true;
+ var k=h("textarea",{rows:2,value:(v.k||[]).join(", ")}),tb=h("textarea",{rows:4,value:(v.tips||[]).join("\n")}),tn=h("textarea",{rows:4,value:(v.tips_en||[]).join("\n")});
+ var dr=h("textarea",{rows:2,value:v.dr||""}),de=h("textarea",{rows:2,value:v.dr_en||""}),m=h("textarea",{rows:2,value:mStr(v.m),placeholder:L("নাম | সংক্ষিপ্ত তথ্য (প্রতি লাইনে একটি)","name | short info (one per line)")});
+ var fa=h("input",{type:"checkbox",checked:!!v.fa}),em=h("input",{type:"checkbox",checked:!!v.em});
+ var g=h("div",{class:"gridf"},[fld(L("শিরোনাম (বাংলা)","Title (Bangla)"),t),fld(L("শিরোনাম (English)","Title (English)"),te),
+  fld(L("কীওয়ার্ড (কমা দিয়ে আলাদা; ব্যবহারকারী এগুলো লিখলে এই গাইড আসবে)","Keywords (comma separated; the guide shows when a user types them)"),k,1),
+  fld(L("করণীয় (বাংলা, প্রতি লাইনে একটি)","What to do (Bangla, one per line)"),tb),fld(L("করণীয় (English, one per line)","What to do (English, one per line)"),tn),
+  fld(L("কখন ডাক্তার/৯৯৯ (বাংলা)","When to see a doctor / 999 (Bangla)"),dr),fld(L("কখন ডাক্তার/৯৯৯ (English)","When to see a doctor / 999 (English)"),de),
+  fld(L("সাধারণ ওষুধ (ঐচ্ছিক)","Common medicines (optional)"),m,1)]);
+ f.appendChild(g);
+ f.appendChild(h("label",{class:"sw"},[fa,h("span",{class:"trk"}),h("span",{text:L("প্রাথমিক চিকিৎসা গাইড","First-aid guide")})]));
+ f.appendChild(h("label",{class:"sw"},[em,h("span",{class:"trk"}),h("span",{text:L("জরুরি (লাল সতর্কতা)","Emergency (red alert)")})]));
+ var r=h("div",{class:"row"});
+ r.appendChild(h("button",{type:"button",text:L("ঠিক আছে","Done"),onclick:function(){var o2={t:t.value.trim(),t_en:te.value.trim(),k:splitK(k.value),tips:splitL(tb.value),tips_en:splitL(tn.value),dr:dr.value.trim(),dr_en:de.value.trim(),m:mParse(m.value),fa:fa.checked?1:0,em:em.checked?1:0};
+  if(!o2.t||!o2.k.length){say(L("শিরোনাম ও অন্তত একটি কীওয়ার্ড দিন।","Enter a title and at least one keyword."),"err");return}o.onOk(o2)}}));
+ r.appendChild(h("button",{type:"button",class:"alt",text:L("বাতিল","Cancel"),onclick:function(){EDIT=null;rSymList()}}));
+ if(o.onReset)r.appendChild(h("button",{type:"button",class:"danger",text:L("ডিফল্টে ফিরুন","Reset to default"),onclick:o.onReset}));
+ f.appendChild(r);return f}
+function rSym(b){
+ b.appendChild(h("p",{class:"hint",text:L("সাইটে খোঁজার সময় এই গাইডগুলো আগে দেখায়, তারপর AI। নিজের গাইড যোগ করুন বা বিল্ট-ইনগুলো বদলান/লুকান।","These guides appear first when people search, before the AI. Add your own, or edit/hide the built-in ones.")}));
+ b.appendChild(h("div",{class:"row"},[h("input",{placeholder:L("খুঁজুন…","Search…"),value:CQ,oninput:function(){CQ=this.value;rSymList()}}),h("button",{type:"button",class:"sm",text:"+ "+L("নতুন যোগ","Add new"),onclick:function(){EDIT={c:1,i:-1};rSymList()}})]));
+ b.appendChild(h("div",{id:"symlist",class:"col"}));rSymList()}
+function symMatch(s){var q=CQ.trim().toLowerCase();if(!q)return true;return (s.t+" "+(s.t_en||"")+" "+(s.k||[]).join(" ")).toLowerCase().indexOf(q)>-1}
+function rSymList(){var w=$("symlist");if(!w)return;w.innerHTML="";
+ w.appendChild(h("b",{text:L("আপনার যোগ করা","Added by you")+" ("+CT.symptoms.length+")"}));
+ if(EDIT&&EDIT.c&&EDIT.i===-1)w.appendChild(symForm({},{onOk:function(v){CT.symptoms.push(v);EDIT=null;dirty();rSymList()}}));
+ CT.symptoms.forEach(function(s,i){if(!symMatch(s))return;
+  if(EDIT&&EDIT.c&&EDIT.i===i){w.appendChild(symForm(s,{onOk:function(v){CT.symptoms[i]=v;EDIT=null;dirty();rSymList()}}));return}
+  w.appendChild(h("div",{class:"it2"},[h("div",{class:"nm"},[s.t,s.em?h("span",{class:"bdg bad",text:L("জরুরি","Emergency")}):null,h("small",{text:s.t_en||""})]),
+   h("div",{class:"ac"},[h("button",{type:"button",class:"sm alt",text:L("এডিট","Edit"),onclick:function(){EDIT={c:1,i:i};rSymList()}}),h("button",{type:"button",class:"sm danger",text:L("মুছুন","Delete"),onclick:function(){CT.symptoms.splice(i,1);dirty();rSymList()}})])]))});
+ w.appendChild(h("b",{text:L("বিল্ট-ইন গাইড","Built-in guides")+" ("+BASE_SYM.length+")"}));
+ BASE_SYM.forEach(function(bs){if(!symMatch(bs))return;var ed=CT.sym_edit[bs.t]||null,hid=ed&&ed.hide;
+  if(EDIT&&!EDIT.c&&EDIT.t===bs.t){var cur=Object.assign({},bs,ed||{});
+   w.appendChild(symForm(cur,{builtin:true,onOk:function(v){var o={};["t_en","dr","dr_en"].forEach(function(k){if(v[k]!==(bs[k]||""))o[k]=v[k]});
+    ["k","tips","tips_en","m"].forEach(function(k){if(JSON.stringify(v[k])!==JSON.stringify(bs[k]||[]))o[k]=v[k]});
+    if(v.fa&&!bs.fa)o.fa=1;if(v.em&&!bs.em)o.em=1;
+    if(Object.keys(o).length)CT.sym_edit[bs.t]=o;else delete CT.sym_edit[bs.t];EDIT=null;dirty();rSymList()},
+    onReset:ed?function(){delete CT.sym_edit[bs.t];EDIT=null;dirty();rSymList()}:null}));return}
+  w.appendChild(h("div",{class:"it2"},[h("div",{class:"nm"},[bs.t,ed&&!hid?h("span",{class:"bdg",text:L("বদলানো","Edited")}):null,hid?h("span",{class:"bdg bad",text:L("লুকানো","Hidden")}):null,bs.em?h("span",{class:"bdg bad",text:L("জরুরি","Emergency")}):null,h("small",{text:bs.t_en||""})]),
+   h("div",{class:"ac"},[hid?null:h("button",{type:"button",class:"sm alt",text:L("এডিট","Edit"),onclick:function(){EDIT={c:0,t:bs.t};rSymList()}}),
+    h("button",{type:"button",class:"sm "+(hid?"":"danger"),text:hid?L("দেখান","Show"):L("লুকান","Hide"),onclick:function(){if(hid){var e2=Object.assign({},ed);delete e2.hide;if(Object.keys(e2).length)CT.sym_edit[bs.t]=e2;else delete CT.sym_edit[bs.t]}else CT.sym_edit[bs.t]=Object.assign({},ed||{},{hide:true});dirty();rSymList()}})])]))})}
+
+/* ---- generic editable rows ---- */
+function listEd(b,arr,fields,mk,addLabel,delLabel){
+ arr.forEach(function(it,i){var g=h("div",{class:"grp"}),grid=h("div",{class:"gridf"});
+  fields.forEach(function(fd){var inp;
+   if(fd.t==="area")inp=h("textarea",{rows:2});else if(fd.t==="sel"){inp=h("select");fd.o.forEach(function(o){inp.appendChild(h("option",{value:o[0],text:o[1]}))})}else inp=h("input",{type:fd.t||"text"});
+   var v=it[fd.k];inp.value=v==null?"":v;if(fd.p)inp.placeholder=fd.p;
+   inp.oninput=inp.onchange=function(){it[fd.k]=fd.t==="number"?(this.value===""?0:+this.value):this.value;dirty()};
+   grid.appendChild(fld(fd.l,inp,fd.f))});
+  g.appendChild(grid);g.appendChild(h("button",{type:"button",class:"sm danger",text:delLabel||L("মুছুন","Delete"),onclick:function(){arr.splice(i,1);dirty();rCont()}}));b.appendChild(g)});
+ b.appendChild(h("button",{type:"button",class:"alt",text:"+ "+addLabel,onclick:function(){arr.push(mk());dirty();rCont()}}))}
+
+/* ---- medicines ---- */
+function rMed(b){
+ b.appendChild(h("p",{class:"hint",text:L("সাইটের মূল ওষুধ-তালিকার (প্রায় ১৩,৬০০ ব্র্যান্ড) সাথে আপনার যোগ করা ব্র্যান্ড মিশে যাবে। একই নামের ব্র্যান্ড থাকলে নতুন ফর্ম/শক্তি/দাম যুক্ত হবে। জেনেরিক নাম তালিকায় থাকলে ব্র্যান্ডের সাথে লিংক হবে, না থাকলে নোটে দেখাবে।","Your brands are merged into the site's main medicine list (about 13,600 brands). If the brand already exists, the new form/strength/price is added. A generic name found in the list is linked; otherwise it shows in the note.")}));
+ b.appendChild(h("b",{text:L("যোগ করা ব্র্যান্ড","Added brands")+" ("+CT.meds.length+")"}));
+ listEd(b,CT.meds,[{k:"n",l:L("ব্র্যান্ডের নাম *","Brand name *")},{k:"g",l:L("জেনেরিক নাম","Generic name")},{k:"f",l:L("ফর্ম (Tablet, Syrup…)","Form (Tablet, Syrup…)")},{k:"s",l:L("শক্তি (500 mg)","Strength (500 mg)")},{k:"m",l:L("প্রস্তুতকারক","Manufacturer")},{k:"p",l:L("দাম (৳)","Price (Tk)"),t:"number"},{k:"nb",l:L("নোট (বাংলা)","Note (Bangla)"),t:"area"},{k:"ne",l:L("নোট (English)","Note (English)"),t:"area"}],function(){return{n:"",g:"",f:"",s:"",m:"",p:0,nb:"",ne:""}},L("ব্র্যান্ড যোগ","Add brand"));
+ var hg=h("div",{class:"grp"});hg.appendChild(h("b",{text:L("লুকানো ব্র্যান্ড","Hidden brands")}));
+ hg.appendChild(h("p",{class:"hint",text:L("ভুল বা বন্ধ হয়ে যাওয়া ব্র্যান্ডের নাম লিখুন (প্রতি লাইনে একটি)। সাইটে এগুলো আর খুঁজে পাওয়া যাবে না।","Write the names of wrong or discontinued brands (one per line). They will no longer be found on the site.")}));
+ var ta=h("textarea",{rows:4,value:CT.med_hide.join("\n")});ta.oninput=function(){CT.med_hide=splitL(ta.value);dirty()};hg.appendChild(ta);b.appendChild(hg)}
+
+/* ---- emergency numbers / vaccines (built-in or custom) ---- */
+function rEmg(b){
+ if(CT.emergency===null){b.appendChild(h("p",{class:"hint",text:L("এখন সাইটের বিল্ট-ইন জরুরি নম্বর (৯৯৯, ১৬২৬৩, ১০২, ১০৯, ১০৯৮, ৩৩৩) দেখাচ্ছে। বদলাতে নিচের বাটন চাপুন।","The site shows its built-in numbers (999, 16263, 102, 109, 1098, 333). Tap below to customize them.")}));
+  b.appendChild(h("button",{type:"button",text:L("বিল্ট-ইন তালিকা থেকে এডিট শুরু করুন","Start editing from the built-in list"),onclick:function(){CT.emergency=cl(BASE_EMG);dirty();rCont()}}));return}
+ b.appendChild(h("p",{class:"hint",text:L("এই তালিকা সাইটের বিল্ট-ইন তালিকার জায়গায় দেখাবে। শুধু সংখ্যা ও + চিহ্ন রাখা হয়।","This list replaces the built-in one on the site. Only digits and + are kept.")}));
+ listEd(b,CT.emergency,[{k:"num",l:L("নম্বর *","Number *"),p:"999"},{k:"bn",l:L("বিবরণ (বাংলা)","Description (Bangla)")},{k:"en",l:L("বিবরণ (English)","Description (English)"),f:1}],function(){return{num:"",bn:"",en:""}},L("নম্বর যোগ","Add number"));
+ b.appendChild(h("button",{type:"button",class:"alt danger",text:L("বিল্ট-ইন তালিকায় ফিরুন","Back to the built-in list"),onclick:function(){CT.emergency=null;dirty();rCont()}}))}
+function rVax(b){
+ if(CT.vaccines===null){b.appendChild(h("p",{class:"hint",text:L("এখন বিল্ট-ইন শিশু-টিকা তালিকা (EPI) দেখাচ্ছে। বদলাতে নিচের বাটন চাপুন।","The built-in child vaccine list (EPI) is shown. Tap below to customize it.")}));
+  b.appendChild(h("button",{type:"button",text:L("বিল্ট-ইন তালিকা থেকে এডিট শুরু করুন","Start editing from the built-in list"),onclick:function(){CT.vaccines=cl(BASE_VX);dirty();rCont()}}));return}
+ b.appendChild(h("p",{class:"hint",text:L("সময়: হয় \"দিন\" (জন্মের পর), নয়তো \"মাস\" দিন। ID বদলাবেন না, ব্যবহারকারীর \"দেওয়া হয়েছে\" চিহ্ন এই ID দিয়ে সংরক্ষিত।","Timing: use either \"days\" (after birth) or \"months\". Don't change an ID: users' \"given\" ticks are saved by ID.")}));
+ listEd(b,CT.vaccines,[{k:"id",l:"ID"},{k:"days",l:L("দিন","Days"),t:"number"},{k:"months",l:L("মাস","Months"),t:"number"},{k:"bn",l:L("নাম (বাংলা)","Name (Bangla)"),f:1},{k:"en",l:L("নাম (English)","Name (English)"),f:1}],function(){return{id:"v"+Date.now().toString(36),bn:"",en:"",days:0,months:0}},L("টিকা যোগ","Add vaccine"));
+ b.appendChild(h("button",{type:"button",class:"alt danger",text:L("বিল্ট-ইন তালিকায় ফিরুন","Back to the built-in list"),onclick:function(){CT.vaccines=null;dirty();rCont()}}))}
+
+/* ---- hospitals, tips, notes ---- */
+function rHos(b){b.appendChild(h("p",{class:"hint",text:L("জরুরি পাতার \"কাছের হাসপাতাল ও ফার্মেসি\" কার্ডে এগুলো যুক্ত হবে। ম্যাপ লিংক https:// দিয়ে শুরু হতে হবে (গুগল ম্যাপের শেয়ার লিংক)।","These are added to the \"Nearby hospital and pharmacy\" card on the Emergency page. The map link must start with https:// (a Google Maps share link).")}));
+ listEd(b,CT.hospitals,[{k:"n",l:L("নাম *","Name *"),f:1},{k:"a",l:L("এলাকা/ঠিকানা","Area / address"),f:1},{k:"ph",l:L("ফোন","Phone")},{k:"ty",l:L("ধরন","Type"),t:"sel",o:[["hospital",L("হাসপাতাল","Hospital")],["pharmacy",L("ফার্মেসি","Pharmacy")],["clinic",L("ক্লিনিক","Clinic")]]},{k:"map",l:L("ম্যাপ লিংক","Map link"),f:1}],function(){return{n:"",a:"",ph:"",map:"",ty:"hospital"}},L("যোগ করুন","Add"))}
+function rTip(b){b.appendChild(h("p",{class:"hint",text:L("\"আজকের টিপস\"-এ বিল্ট-ইনগুলোর সাথে এগুলোও ঘুরে ঘুরে আসবে। প্রথমবার সাইট খোলার পর পরের বার থেকে দেখাবে।","These rotate in \"Today's tip\" together with the built-in ones. A visitor sees them from their next visit onward.")}));
+ listEd(b,CT.tips,[{k:"bn",l:L("বাংলা","Bangla"),t:"area",f:1},{k:"en",l:"English",t:"area",f:1}],function(){return{bn:"",en:""}},L("টিপ যোগ","Add tip"))}
+function rLeg(b){b.appendChild(h("p",{class:"hint",text:L("গোপনীয়তা নীতি ও শর্তাবলি পাতার নিচে \"হালনাগাদ নোট\" হিসেবে যুক্ত হবে। মূল লেখা বদলায় না। ফাঁকা রাখলে কিছু দেখাবে না।","Shown at the bottom of the Privacy policy & terms page as an \"Additional notes\" card. The main text is not changed. Leave empty to show nothing.")}));
+ var bn=h("textarea",{rows:6,value:CT.legal.bn}),en=h("textarea",{rows:6,value:CT.legal.en});
+ bn.oninput=function(){CT.legal.bn=bn.value;dirty()};en.oninput=function(){CT.legal.en=en.value;dirty()};
+ b.appendChild(fld(L("বাংলা","Bangla"),bn));b.appendChild(fld("English",en))}
+
+/* ================= AI tab extras: test console + prompt history ================= */
+$("ask_go").onclick=async function(){var m=V("ask_msg").trim();if(!m){say(L("একটি প্রশ্ন লিখুন।","Type a question."),"err");return}
+ $("ask_out").textContent=L("উত্তর আসছে…","Waiting…");var r=await call("/admin/ask","POST",{kind:V("ask_kind"),message:m});
+ if(r.d.ok)$("ask_out").textContent=r.d.response+"\n\n— "+r.d.model+" · "+r.d.ms+" ms · "+r.d.tokens+" tokens";
+ else if(r.s!==401)$("ask_out").textContent=L("ব্যর্থ: ","Failed: ")+(r.d.error||r.s)};
+var HIST=null;
+async function loadHist(){var r=await call("/admin/prompthist","GET");if(r.d.ok){HIST=r.d.hist;rHist()}}
+function rHist(){var w=$("histl");w.innerHTML="";if(!HIST||!HIST.length){w.appendChild(h("p",{class:"hint",text:L("এখনো কোনো পুরোনো ভার্সন নেই। প্রম্পট বদলে সেভ করলে আগেরটা এখানে জমবে (শেষ ১০টি)।","No older versions yet. When you change and save prompts, the previous one is kept here (last 10).")}));return}
+ HIST.forEach(function(x,i){var keys=Object.keys(x.sys||{});w.appendChild(h("div",{class:"it2"},[h("div",{class:"nm"},[fmt(x.t),h("small",{text:keys.length?keys.join(", "):L("সব ডিফল্ট","All default")})]),
+  h("button",{type:"button",class:"sm",text:L("ফিরুন","Restore"),onclick:async function(){if(await postSet({restore_sys:i},L("প্রম্পট আগের ভার্সনে ফিরেছে।","Prompts restored."))){loadHist()}}})]))})}
+
+/* ================= Alerts (Security tab) ================= */
+$("al_save").onclick=function(){postSet({alert:{on:$("al_on").checked,errs:V("al_errs"),reports:$("al_rep").checked}})};
+$("al_test").onclick=async function(){var r=await call("/admin/alerttest","POST");
+ if(r.d.ok)say(L("টেস্ট অ্যালার্ট পাঠানো হয়েছে। Telegram দেখুন।","Test alert sent. Check Telegram."),"ok");
+ else if(r.s!==401)say(r.d.error==="tg_not_configured"?L("Telegram যুক্ত নেই। নিচের নির্দেশ দেখুন।","Telegram is not connected. See the instructions below."):L("পাঠানো যায়নি। টোকেন ও চ্যাট আইডি ঠিক আছে কি দেখুন।","Could not send. Check the token and chat ID."),"err")};
+
+/* ================= Stats chart ================= */
+function drawChart(){var w=$("chart");if(!w||!STD)return;w.innerHTML="";var days=STD.days.slice().reverse();
+ var tot=days.map(function(x){return n0(x.req_chat)+n0(x.req_symptom)+n0(x.req_medicine)}),mx=Math.max.apply(null,tot.concat([1])),W=days.length*34+10,H=130,bw=22,ns="http://www.w3.org/2000/svg";
+ var s=document.createElementNS(ns,"svg");s.setAttribute("viewBox","0 0 "+W+" "+(H+22));s.setAttribute("width","100%");s.setAttribute("role","img");
+ days.forEach(function(x,i){var hh=Math.round(tot[i]/mx*H),eh=Math.min(hh,Math.round(n0(x.err)/mx*H)),xx=8+i*34;
+  var r=document.createElementNS(ns,"rect");r.setAttribute("x",xx);r.setAttribute("y",H-hh+4);r.setAttribute("width",bw);r.setAttribute("height",hh);r.setAttribute("rx",4);r.setAttribute("style","fill:var(--acc)");s.appendChild(r);
+  if(eh){var e=document.createElementNS(ns,"rect");e.setAttribute("x",xx);e.setAttribute("y",H-eh+4);e.setAttribute("width",bw);e.setAttribute("height",eh);e.setAttribute("rx",4);e.setAttribute("style","fill:var(--bad)");s.appendChild(e)}
+  var tv=document.createElementNS(ns,"text");tv.setAttribute("x",xx+bw/2);tv.setAttribute("y",H-hh+1);tv.setAttribute("text-anchor","middle");tv.setAttribute("style","font-size:9px;fill:var(--muted)");tv.textContent=tot[i]||"";s.appendChild(tv);
+  var tx=document.createElementNS(ns,"text");tx.setAttribute("x",xx+bw/2);tx.setAttribute("y",H+16);tx.setAttribute("text-anchor","middle");tx.setAttribute("style","font-size:9px;fill:var(--muted)");tx.textContent=x.d.slice(8);s.appendChild(tx)});
+ w.appendChild(s);var leg=h("p",{class:"hint",text:L("সবুজ = প্রশ্ন, লাল = ত্রুটি (প্রতিদিন, শেষ ১৪ দিন)","Green = requests, red = errors (per day, last 14 days)")});w.appendChild(leg);
+ var sum={c:0,s:0,m:0,r:0};STD.days.forEach(function(x){sum.c+=n0(x.req_chat);sum.s+=n0(x.req_symptom);sum.m+=n0(x.req_medicine);sum.r+=n0(x.rep)});
+ var k=h("div",{class:"kpis4"},[kp(sum.c,L("চ্যাট (১৪ দিন)","Chat (14d)")),kp(sum.s,L("লক্ষণ (১৪ দিন)","Symptom (14d)")),kp(sum.m,L("ওষুধ (১৪ দিন)","Medicine (14d)")),kp(sum.r,L("রিপোর্ট (১৪ দিন)","Reports (14d)"))]);w.appendChild(k)}
+var _rSt=rSt;rSt=function(){_rSt();drawChart()};
+
+/* ================= Backup / restore ================= */
+$("bk_dl").onclick=async function(){var r=await call("/admin/backup","GET");if(!r.d.ok)return;
+ var blob=new Blob([JSON.stringify(r.d,null,1)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);
+ a.download="pilldrop-backup-"+new Date().toISOString().slice(0,10)+".json";document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(a.href)},3000);say(L("ব্যাকআপ ডাউনলোড হয়েছে।","Backup downloaded."),"ok")};
+var BKJ=null;
+$("bk_file").onchange=function(){var f=this.files&&this.files[0];BKJ=null;$("bk_info").textContent="";$("bk_rs").hidden=true;if(!f)return;
+ var rd=new FileReader();rd.onload=function(){try{var j=JSON.parse(rd.result);if(!j||j.app!=="PillDrop"||(!j.settings&&!j.content))throw 0;BKJ=j;
+  $("bk_info").textContent=L("ফাইল ঠিক আছে। ","File looks fine. ")+(j.at||"")+" · "+L("লক্ষণ ","symptoms ")+((j.content&&j.content.symptoms)||[]).length+" · "+L("ওষুধ ","meds ")+((j.content&&j.content.meds)||[]).length;$("bk_rs").hidden=false}
+  catch(e){$("bk_info").textContent=L("এটি PillDrop-এর ব্যাকআপ ফাইল নয়।","This is not a PillDrop backup file.")}};rd.readAsText(f)};
+$("bk_rs").onclick=async function(){if(!BKJ)return;
+ if($("bk_rs").dataset.sure!=="1"){$("bk_rs").dataset.sure="1";$("bk_rs").textContent=T("sure");setTimeout(function(){$("bk_rs").dataset.sure="";$("bk_rs").textContent=L("রিস্টোর করুন","Restore")},4000);return}
+ $("bk_rs").dataset.sure="";$("bk_rs").textContent=L("রিস্টোর করুন","Restore");
+ var r=await call("/admin/restore","POST",{settings:BKJ.settings,content:BKJ.content});
+ if(r.d.ok){say(L("রিস্টোর হয়েছে।","Restored."),"ok");BKJ=null;$("bk_rs").hidden=true;$("bk_file").value="";CT=null;loadSet();loadDash()}else if(r.s!==401)say(L("রিস্টোর হয়নি: ","Restore failed: ")+(r.d.error||r.s),"err")};
+
+/* ================= wiring ================= */
+document.querySelectorAll(".tb").forEach(function(b){b.addEventListener("click",function(){var t=b.dataset.tab;
+ if(t==="dash")loadDash();if(t==="content"&&!CT)loadContent();if(t==="content"&&CT)rCont();if(t==="rep")loadRep();if(t==="ai")loadHist()})});
+window.rer2=function(){if(DASH)rDash();if(CT&&!$("panel").hidden)rCont();if(RPD)rRep();if(HIST)rHist()};
+var _load2=load;load=async function(){await _load2();if(!$("panel").hidden){document.querySelector("main").classList.add("wide");loadDash()}};
+var _toLogin=toLogin;toLogin=function(m){CT=null;DASH=null;RPD=null;CDIRTY=false;paintBar();document.querySelector("main").classList.remove("wide");_toLogin(m)};
+
+applyTheme();applyLang();
+(function(){var e=$("pdsp");function h(){e.classList.add("off");setTimeout(function(){if(e.parentNode)e.parentNode.removeChild(e)},800)}setTimeout(h,1800);e.addEventListener("click",h)})();
+if(tok)load();
+</script></body></html>
